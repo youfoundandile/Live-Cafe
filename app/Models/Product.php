@@ -43,6 +43,8 @@ class Product extends Model
      * A product can require many ingredients.
      *
      * An ingredient can also belong to many products.
+     *
+     * @return BelongsToMany<Ingredient, $this, ProductIngredient>
      */
     public function ingredients(): BelongsToMany
     {
@@ -52,6 +54,14 @@ class Product extends Model
         )
             ->using(ProductIngredient::class)
             ->withPivot('quantity_required');
+    }
+
+    /**
+     * A product can have many inventory transactions.
+     */
+    public function inventoryTransactions(): MorphMany
+    {
+        return $this->morphMany(InventoryTransaction::class, 'stockable');
     }
 
     /**
@@ -84,5 +94,26 @@ class Product extends Model
     public function images(): MorphMany
     {
         return $this->morphMany(Image::class, 'imageable');
+    }
+
+    /*
+        * Determine if the product is made or merch.
+    */
+    public function isMade(): bool
+    {
+        return $this->ingredients->isNotEmpty();
+    }
+
+    /**
+     * Calculate the available quantity of the product based on its ingredients.
+     */
+    public function availableQuantity(): int
+    {
+        if (! $this->isMade()) {
+            return (int) $this->quantity;
+        }
+        // If the product is made, calculate the available quantity based on its ingredients.
+
+        return (int) $this->ingredients->map(fn ($i) => floor($i->quantity / $i->pivot->quantity_required))->min();
     }
 }

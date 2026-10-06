@@ -37,6 +37,7 @@ Route::prefix('admin')
         // Inventory
         Route::get('/inventory', [InventoryController::class, 'index'])->name('inventory.index');
         Route::patch('/inventory/{product}/adjust', [InventoryController::class, 'adjust'])->name('inventory.adjust');
+        Route::patch('/inventory/ingredients/{ingredient}/adjust', [InventoryController::class, 'adjustIngredient'])->name('inventory.ingredients.adjust');
 
         // Orders
         Route::resource('orders', OrderManagementController::class)->only(['index', 'show']);

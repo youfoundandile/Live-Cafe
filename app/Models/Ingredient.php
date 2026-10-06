@@ -6,7 +6,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
+/**
+ * An ingredient can be used by many products.
+ *
+ * @property-read ProductIngredient $pivot
+ */
 class Ingredient extends Model
 {
     use HasFactory;
@@ -44,5 +50,13 @@ class Ingredient extends Model
     public function productIngredients(): HasMany
     {
         return $this->hasMany(ProductIngredient::class);
+    }
+
+    /**
+     * A ingredient can have many inventory transactions.
+     */
+    public function inventoryTransactions(): MorphMany
+    {
+        return $this->morphMany(InventoryTransaction::class, 'stockable');
     }
 }
