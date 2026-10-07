@@ -223,6 +223,18 @@
                         <li>
                             <a href="{{ route('shop.orders.index') }}" class="{{ request()->is('shop/orders*') ? 'active' : '' }}">My Orders</a>
                         </li>
+
+                        <li>
+                            <a href="{{ route('shop.cart.index') }}" class="{{ request()->is('shop/cart*') ? 'active' : '' }}">
+                                Cart
+                                 @php
+                                 $cartCount = array_sum(session('cart', []));
+                                 @endphp
+                                @if($cartCount > 0)
+                                   ({{ $cartCount }})
+                                @endif
+                            </a>
+                        </li>
                     @endif
 
                     @if(auth()->user()->isStaff())
