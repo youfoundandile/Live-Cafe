@@ -53,10 +53,9 @@ Route::prefix('admin')
         Route::patch('/sync-conflicts/{conflict}', [SyncConflictController::class, 'resolve'])->name('sync.resolve');
 
         // routes/admin.php
-     
 
         // Events
-         Route::resource('events', EventManagementController::class);
+        Route::resource('events', EventManagementController::class);
         Route::get('/events/{event}/rsvps', [EventManagementController::class, 'rsvps'])->name('events.rsvps');
         Route::get('/events/{event}/rsvps.csv', [EventManagementController::class, 'exportRsvps'])->name('events.rsvps.export');
 

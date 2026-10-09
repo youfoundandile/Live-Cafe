@@ -26,13 +26,11 @@ class Event extends Model
         ];
     }
 
-        /**
+    /**
      * An event can have many RSVPs.
      */
     public function rsvps(): HasMany
     {
         return $this->hasMany(Rsvp::class);
     }
-
-
 }
