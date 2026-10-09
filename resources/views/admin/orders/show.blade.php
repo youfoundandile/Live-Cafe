@@ -23,5 +23,6 @@
     <tr><th colspan="3">Total</th><th>R {{ number_format($order->total, 2) }}</th></tr>
 </table>
 
- @include('admin.orders.partials.status-buttons')
+ @include('admin.orders.status-buttons')
+
 @endsection

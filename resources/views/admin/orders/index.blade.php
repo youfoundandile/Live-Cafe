@@ -27,7 +27,8 @@
             <td>R {{ number_format($order->total, 2) }}</td>
             <td>{{ $order->status }}</td>
             <td>
-                 @include('admin.orders.partials.status-buttons') 
+                 @include('admin.orders.status-buttons')
+
             </td>
         </tr>
     @endforeach
