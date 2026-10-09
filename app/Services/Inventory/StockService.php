@@ -62,7 +62,7 @@ class StockService
                     $this->log($row, -$take, 'Offline POS sale', $source);
                 }
                 if ($amount > $take) {
-                    $shortfalls[] = [$amount - $take];
+                    $shortfalls[] = ['item' => $row, 'shortfall' => $amount - $take];
                 }
             }
             $this->refreshAvailability($product);

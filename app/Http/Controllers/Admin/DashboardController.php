@@ -25,7 +25,7 @@ class DashboardController extends Controller
                 ->whereIn('status', ['pending', 'confirmed'])
                 ->count(),
             'revenueToday' => Sale::whereDate('occurred_at', today())
-                ->where('status', 'collected')
+                ->where('status', 'confirmed')     // was 'collected', an order status, so always R0
                 ->sum('total'),
             'upcomingEvents' => Event::where('event_date', '>=', now()->toDateString())
                 ->where('event_date', '<=', now()->addDays(30)->toDateString())

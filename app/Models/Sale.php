@@ -19,6 +19,10 @@ class Sale extends Model
         'is_offline',
         'synced_at',
         'occurred_at',
+        'client_uuid',
+        'voided_by',
+        'voided_at',
+        'void_reason',
     ];
 
     protected function casts(): array
@@ -28,6 +32,7 @@ class Sale extends Model
             'is_offline' => 'boolean',
             'synced_at' => 'datetime',
             'occurred_at' => 'datetime',
+            'voided_at' => 'datetime',
         ];
     }
 

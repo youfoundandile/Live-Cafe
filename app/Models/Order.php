@@ -11,6 +11,16 @@ class Order extends Model
 {
     use HasFactory;
 
+    public const TRANSITIONS = [
+        /**
+         * The available status transitions.
+         */
+        'pending' => ['confirmed', 'cancelled'],
+        'confirmed' => ['collected', 'cancelled'],
+        'collected' => [],
+        'cancelled' => [],
+    ];
+
     protected $fillable = [
         'user_id',
         'status',
@@ -32,6 +42,12 @@ class Order extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function canMoveTo(string $status): bool
+    {
+        return in_array($status, self::TRANSITIONS[$this->status] ?? [], true);
+
     }
 
     /**

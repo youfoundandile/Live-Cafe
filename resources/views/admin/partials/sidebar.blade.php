@@ -14,6 +14,14 @@
                 <li><a href="{{ route('admin.inventory.index') }}">Inventory</a></li>
                 <li><a href="{{ route('admin.orders.index') }}">Orders</a></li>
                 <li><a href="{{ route('admin.sales.index') }}">POS Sales</a></li>
+                <li>
+                    <a href="{{ route('admin.sync.index') }}">
+                        Sync conflicts
+                        @php($openConflicts = \App\Models\SyncConflict::open()->count())
+                        @if ($openConflicts) <span class="status-badge status-cancelled">{{ $openConflicts }}</span> @endif
+                    </a>
+                </li>
+
             </ul>
         </div>
 

@@ -16,5 +16,6 @@ test('opens every admin page', function (string $route) {
     'admin.sales.index',
     'admin.announcements.index',
     'admin.partnerships.index',
+    'admin.sync.index',
 
 ]);
