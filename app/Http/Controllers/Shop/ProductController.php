@@ -12,16 +12,17 @@ class ProductController extends Controller
 {
     public function index(Request $request): View
     {
-        // 1. Get all categories EXCEPT Add-ons, ordered alphabetically by name
+        // Categories for the quick-jump links (Add-ons are excluded)
         $categories = Category::where('name', 'not like', '%add-on%')
             ->where('name', 'not like', '%addon%')
-            ->orderBy('name') // Sorts alphabetically (Drinks, Food, Merch)
+            ->orderBy('name')
             ->get();
 
-        // 2. Load products, filtering out the Add-ons category completely
-        $productsByCategory = Product::where('prod_availability', true)
-            ->where('quantity', '>', 0)
-            ->with('category')
+        // All products. Available ones come first, sold-out ones last.
+        // Sold-out products stay visible so customers can see them.
+        $productsByCategory = Product::with('category')
+            ->orderByRaw('(prod_availability = 0 OR quantity < 1) ASC')
+            ->orderBy('name')
             ->get()
             ->filter(fn (Product $p) => $p->category !== null)
             ->groupBy(fn (Product $p) => $p->category->name); // @phpstan-ignore-line
