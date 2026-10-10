@@ -3,12 +3,9 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
-use App\Models\OrderDetail;
 use App\Models\Product;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class CheckoutController extends Controller
@@ -51,7 +48,10 @@ class CheckoutController extends Controller
     }
 
     /**
-     * Process checkout: safely verify stock, create the order, reduce stock.
+     * Validate the checkout details, then send the customer to payment.
+     *
+     * No order is created and no stock is deducted here. The order is only
+     * created after Paystack confirms the payment (see PaymentController).
      */
     public function store(Request $request): RedirectResponse
     {
@@ -67,67 +67,31 @@ class CheckoutController extends Controller
                 ->with('error', 'Your cart is empty.');
         }
 
-        try {
-            $order = DB::transaction(function () use ($cart, $validated) {
+        /*
+         * Preliminary stock check only, to avoid sending the customer to
+         * Paystack for a product that is already clearly unavailable.
+         * The authoritative, lock-protected check happens in
+         * PaymentController, when the order is actually created.
+         */
+        foreach ($cart as $productId => $quantity) {
+            $product = Product::find($productId);
 
-                $order = Order::create([
-                    'user_id' => auth()->id(),
-                    'status' => 'pending',
-                    'total' => 0,
-                    'collection_time' => $validated['collection_time'],
-                ]);
+            if (! $product) {
+                return redirect()
+                    ->route('shop.cart.index')
+                    ->with('error', 'One of the products in your cart is no longer available.');
+            }
 
-                $total = 0;
-
-                foreach ($cart as $productId => $quantity) {
-
-                    $product = Product::where('id', $productId)
-                        ->lockForUpdate()
-                        ->first();
-
-                    if (! $product) {
-                        throw new \Exception('A product in your cart no longer exists.');
-                    }
-
-                    if (! $product->prod_availability || $product->quantity < $quantity) {
-                        throw new \Exception(
-                            "Sorry, {$product->name} no longer has enough stock. Please update your cart."
-                        );
-                    }
-
-                    OrderDetail::create([
-                        'order_id' => $order->id,
-                        'product_id' => $product->id,
-                        'quantity' => $quantity,
-                        'unit_price' => $product->price,
-                    ]);
-
-                    $product->quantity -= $quantity;
-
-                    if ($product->quantity <= 0) {
-                        $product->prod_availability = false;
-                    }
-
-                    $product->save();
-
-                    $total += $product->price * $quantity;
-                }
-
-                $order->update(['total' => $total]);
-
-                return $order;
-            });
-
-        } catch (\Exception $e) {
-            return redirect()
-                ->route('shop.cart.index')
-                ->with('error', $e->getMessage());
+            if (! $product->prod_availability || $product->quantity < $quantity) {
+                return redirect()
+                    ->route('shop.cart.index')
+                    ->with('error', "Sorry, {$product->name} no longer has enough stock. Please update your cart.");
+            }
         }
 
-        session()->forget('cart');
+        // Keep the pickup time until payment is confirmed.
+        session(['pending_collection_time' => $validated['collection_time']]);
 
-        return redirect()
-            ->route('shop.orders.show', $order)
-            ->with('success', 'Order placed! Your order reference is #'.$order->id);
+        return redirect()->route('shop.payment.start');
     }
 }

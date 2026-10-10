@@ -3,6 +3,7 @@
 use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CheckoutController;
 use App\Http\Controllers\Shop\OrderController;
+use App\Http\Controllers\Shop\PaymentController;
 use App\Http\Controllers\Shop\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -40,5 +41,10 @@ Route::prefix('shop')->name('shop.')->group(function () {
         Route::get('/orders', [OrderController::class, 'index'])->name('orders.index');
         Route::get('/orders/{order}', [OrderController::class, 'show'])->name('orders.show');
         Route::delete('/orders/{order}/cancel', [OrderController::class, 'cancel'])->name('orders.cancel');
+
+        // Payment
+        Route::get('/payment/start', [PaymentController::class, 'initialize'])->name('payment.start');
+        Route::get('/payment/callback', [PaymentController::class, 'callback'])->name('payment.callback');
+        Route::get('/payment/cancelled', [PaymentController::class, 'cancelled'])->name('payment.cancelled');
     });
 });

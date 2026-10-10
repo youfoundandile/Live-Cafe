@@ -7,7 +7,7 @@
     <div class="checkout-container">
 
         <div class="checkout-header">
-            <p class="checkout-eyebrow">LIVE CAFE STORE</p>
+            <p class="checkout-eyebrow">LIVE café</p>
             <h1>Checkout</h1>
             <p class="checkout-subtitle">Confirm your order and choose a collection time.</p>
         </div>

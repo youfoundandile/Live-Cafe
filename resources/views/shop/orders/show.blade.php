@@ -49,7 +49,7 @@
 
         @if(in_array($order->status, ['pending', 'confirmed']))
             <form action="{{ route('shop.orders.cancel', $order) }}" method="POST"
-                  onsubmit="return confirm('Cancel this order?');">
+                  onsubmit="return confirm('Cancel this order? LIVE café will refund your payment.');">
                 @csrf
                 @method('DELETE')
                 <button type="submit" class="cancel-order-btn">Cancel order</button>

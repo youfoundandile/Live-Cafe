@@ -72,6 +72,6 @@ class OrderController extends Controller
 
         return redirect()
             ->route('shop.orders.show', $order)
-            ->with('success', 'Order #'.$order->id.' has been cancelled.');
+            ->with('success', 'Order #'.$order->id.' has been cancelled. LIVE café will refund your payment, and you will be contacted if there are any problems.');
     }
 }
