@@ -19,9 +19,9 @@ class DashboardStatsService
         $sales = Sale::whereDate('occurred_at', today())
             ->where('status', 'confirmed');                  // cancelled = voided, excluded
 
-        $nextEvent = Event::whereDate('event_date', '>=', today())
-            ->withCount('rsvps')
-            ->withSum('rsvps', 'extras')
+        $nextEvent = Event::scheduled()->whereDate('event_date', '>=', today())
+            ->withCount(['rsvps' => fn ($q) => $q->active()])
+            ->withSum(['rsvps' => fn ($q) => $q->active()], 'extras')
             ->orderBy('event_date')
             ->orderBy('event_time')
             ->first();

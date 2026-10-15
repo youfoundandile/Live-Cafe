@@ -16,10 +16,14 @@
     </div>
 @endif
 
-<form method="POST" action="{{ route('admin.categories.store') }}" class="adjust-form">
+<form method="POST" action="{{ route('admin.categories.store') }}" class="filter-bar">
     @csrf
-    <input type="text" name="name" value="{{ old('name') }}" placeholder="New category, e.g. Smoothies" maxlength="100" required>
-    <input type="number" name="sort_order" value="{{ old('sort_order', $categories->max('sort_order') + 1) }}" min="0" required>
+    <label>New category
+        <input type="text" name="name" value="{{ old('name') }}" placeholder="e.g. Smoothies" maxlength="100" required>
+    </label>
+    <label>Sort order
+        <input type="number" name="sort_order" value="{{ old('sort_order', $categories->max('sort_order') + 1) }}" min="0" required>
+    </label>
     <button type="submit">Add category</button>
 </form>
 
@@ -43,7 +47,7 @@
                     <form method="POST" action="{{ route('admin.categories.destroy', $category) }}" style="display:inline"
                           onsubmit="return confirm('Delete this category?')">
                         @csrf @method('DELETE')
-                        <button type="submit">Delete</button>
+                        <button type="submit" class="btn-danger">Delete</button>
                     </form>
                 @endif
             </td>

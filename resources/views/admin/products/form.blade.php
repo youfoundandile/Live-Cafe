@@ -78,7 +78,7 @@
     </fieldset>
 
     <button type="submit">{{ $product->exists ? 'Save changes' : 'Add product' }}</button>
-    <a href="{{ route('admin.products.index') }}">Cancel</a>
+    <a href="{{ route('admin.products.index') }} " class="btn btn-quiet">Cancel</a>
 </form>
 
 <template id="recipe-row-template">

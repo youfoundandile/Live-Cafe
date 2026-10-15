@@ -39,7 +39,7 @@ class DashboardController extends Controller
             'upcomingEvents' => Event::where('event_date', '>=', now()->toDateString())
                 ->where('event_date', '<=', now()->addDays(30)->toDateString())
                 ->count(),
-            'totalRsvps' => Rsvp::whereHas('event', fn ($q) => $q->where('event_date', '>=', now()->toDateString())
+            'totalRsvps' => Rsvp::active()->whereHas('event', fn ($q) => $q->where('event_date', '>=', now()->toDateString())
             )->count(),
         ];
 
@@ -53,7 +53,7 @@ class DashboardController extends Controller
             ->take(8)
             ->get();
 
-        $recentRsvps = Rsvp::with(['user', 'event'])->latest()->take(8)->get();
+        $recentRsvps = Rsvp::active()->with(['user', 'event'])->latest()->take(8)->get();
 
         return view('admin.dashboard', compact('stats', 'recentOrders', 'recentSales', 'recentRsvps'));
     }

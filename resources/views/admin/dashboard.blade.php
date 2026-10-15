@@ -1,19 +1,8 @@
-@extends('layouts.app')
-
+{{-- resources/views/admin/dashboard.blade.php --}}
+@extends('admin.layout')
 @section('title', 'Admin Dashboard — Live Cafe')
 
-@push('styles')
-  @include('admin.partials.styles')
-  
-@endpush
-
-@section('content')
-
-<div class="admin-wrap">
-
-    {{-- Sidebar --}}
-    @include('admin.partials.sidebar')
-
+@section('admin-content')
 
     {{-- Main --}}
     <div class="admin-main">

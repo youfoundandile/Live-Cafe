@@ -8,9 +8,9 @@
 
 <p>Customer: {{ $order->user->name }} {{ $order->user->surname }} ({{ $order->user->email }})</p>
 <p>Collection time: {{ $order->collection_time->format('d M Y H:i') }}</p>
-<p>Status: {{ $order->status }}</p>
+<p>Status: <span class="status-badge status-{{ $order->status }}">{{ $order->status }}</span></p>
 
-<table>
+<table class="data-table">
     <tr><th>Product</th><th>Quantity</th><th>Unit price</th><th>Subtotal</th></tr>
     @foreach ($order->orderDetails as $line)
         <tr>
@@ -24,5 +24,4 @@
 </table>
 
  @include('admin.orders.status-buttons')
-
 @endsection

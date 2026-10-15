@@ -40,7 +40,7 @@
         </select>
     </label>
 
-    <button type="submit">Save changes</button>
-    <a href="{{ route('admin.users.index') }}">Cancel</a>
+    <button type="submit" class="btn">Save changes</button>
+    <a href="{{ route('admin.users.index') }}" class="btn btn-quiet">Cancel</a>
 </form>
 @endsection

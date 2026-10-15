@@ -35,3 +35,18 @@ test('lets an admin resolve a conflict with a recount', function () {
     expect($conflict->fresh()->status)->toBe('resolved')
         ->and($shirt->fresh()->quantity)->toBe(10);
 });
+
+test('shows which sale and item an open conflict is about', function () {
+    $this->actingAs(User::factory()->admin()->create());
+    $shirt = Product::factory()->create(['name' => 'Run Club Tee', 'quantity' => 0]);
+    $sale = Sale::factory()->create();
+    SyncConflict::create([
+        'sales_id' => $sale->id, 'stockable_type' => $shirt->getMorphClass(),
+        'stockable_id' => $shirt->id, 'shortfall' => 2,
+    ]);
+
+    $this->get(route('admin.sync.index'))
+        ->assertOk()
+        ->assertSee('Run Club Tee')
+        ->assertSee('#'.$sale->id);
+});

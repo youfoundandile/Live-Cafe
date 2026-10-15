@@ -51,7 +51,7 @@
         <input type="password" name="password_confirmation" autocomplete="new-password" required>
     </label>
 
-    <button type="submit">Add staff member</button>
-    <a href="{{ route('admin.users.index') }}">Cancel</a>
+    <button type="submit" class="btn">Add staff member</button>
+    <a href="{{ route('admin.users.index') }}" class="btn btn-quiet">Cancel</a>
 </form>
 @endsection

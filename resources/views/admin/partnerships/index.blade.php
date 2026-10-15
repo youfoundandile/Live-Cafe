@@ -4,7 +4,11 @@
 
 @section('admin-content')
 <h1>Partnerships</h1>
-<a href="{{ route('admin.partnerships.create') }}">New partnership</a>
+<div class="admin-section-header">
+    <h1>Partnerships</h1>
+    <a href="{{ route('admin.partnerships.create') }}" class="btn">New partnership</a>
+</div>
+<p class="admin-sub">Companies whose staff get the Live Cafe partnership benefit at the till. Open one to add or remove its members.</p>
 
 <table class="data-table">
     <tr><th>Name</th><th>Active members</th><th>Status</th><th></th></tr>
@@ -18,18 +22,18 @@
                 </span>
             </td>
             <td>
-                <a href="{{ route('admin.partnerships.edit', $partnership) }}">Edit</a>
+                <a href="{{ route('admin.partnerships.edit', $partnership) }}" class="btn">Edit</a>
                 @if ($partnership->status)
                     <form method="POST" action="{{ route('admin.partnerships.destroy', $partnership) }}" style="display:inline"
                           onsubmit="return confirm('Deactivate this partnership?')">
                         @csrf @method('DELETE')
-                        <button type="submit">Deactivate</button>
+                        <button type="submit" class="btn-danger">Deactivate</button>
                     </form>
                 @endif
             </td>
         </tr>
     @empty
-        <tr><td colspan="4">No partnerships yet.</td></tr>
+        <tr><td colspan="4" class="empty">No partnerships yet.</td></tr>
     @endforelse
 </table>
 @endsection

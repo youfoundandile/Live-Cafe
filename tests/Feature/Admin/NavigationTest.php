@@ -19,5 +19,14 @@ test('opens every admin page', function (string $route) {
     'admin.sync.index',
     'admin.categories.index',
     'admin.users.create',
+    'admin.events.create',
 
 ]);
+
+test('marks the current page in the sidebar', function () {
+    $this->actingAs(User::factory()->admin()->create());
+
+    $this->get(route('admin.products.index'))
+        ->assertOk()
+        ->assertSee('class="active">Products', false);   // false: match the raw HTML
+});
