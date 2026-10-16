@@ -53,7 +53,7 @@
 
                                 @if($image)
                                     <img
-                                        src="{{ asset('storage/' . $image->path) }}"
+                                        src="{{ asset($image->path) }}"
                                         alt="{{ $image->alt_text ?? $item['product']->name }}"
                                     >
                                 @else

@@ -25,21 +25,154 @@
                 <form action="{{ route('shop.checkout.store') }}" method="POST" id="checkout-form">
                     @csrf
 
-                    <label for="collection_time">Pickup date &amp; time</label>
-                    <input
-                        type="datetime-local"
-                        id="collection_time"
-                        name="collection_time"
-                        value="{{ old('collection_time') }}"
-                        required
-                    >
-                    @error('collection_time')
-                        <p class="field-error">{{ $message }}</p>
-                    @enderror
+                    
+<label for="collection_date">Pickup date</label>
+<input
+    type="date"
+    id="collection_date"
+    min="{{ now()->toDateString() }}"
+    value="{{ old('collection_time') ? \Illuminate\Support\Carbon::parse(old('collection_time'))->format('Y-m-d') : '' }}"
+    required
+>
 
-                    <p class="checkout-note">
-                        Orders are collection only from LIVE café, Sandton. No delivery is available.
-                    </p>
+<label for="collection_slot">Pickup time</label>
+<select id="collection_slot" required disabled>
+    <option value="">Choose a date first</option>
+</select>
+
+<input
+    type="hidden"
+    id="collection_time"
+    name="collection_time"
+    value="{{ old('collection_time') }}"
+>
+
+@error('collection_time')
+    <p class="field-error">{{ $message }}</p>
+@enderror
+
+<p id="collection-message" class="checkout-note">
+    Weekdays: 06:10–17:50. Saturdays: 06:10–14:50.
+    Closed Sundays. Collection slots are every 10 minutes.
+</p>
+
+<p class="checkout-note">
+    Orders are collection only from LIVE café, Sandton.
+    No delivery is available.
+</p>
+
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const dateInput = document.getElementById('collection_date');
+    const timeSelect = document.getElementById('collection_slot');
+    const hiddenInput = document.getElementById('collection_time');
+    const message = document.getElementById('collection-message');
+
+    const previousValue = hiddenInput.value;
+    const previousDate = previousValue ? previousValue.slice(0, 10) : '';
+    const previousTime = previousValue ? previousValue.slice(11, 16) : '';
+
+    dateInput.value = previousDate;
+
+    function refreshSlots() {
+        const selectedDate = dateInput.value;
+
+        timeSelect.replaceChildren();
+        hiddenInput.value = '';
+
+        const placeholder = document.createElement('option');
+        placeholder.value = '';
+        placeholder.textContent = 'Choose a collection time';
+        timeSelect.appendChild(placeholder);
+
+        if (!selectedDate) {
+            timeSelect.disabled = true;
+            message.textContent = 'Please select a collection date.';
+            return;
+        }
+
+        // Parse the chosen calendar date without UTC conversion.
+        const [year, month, day] = selectedDate.split('-').map(Number);
+        const date = new Date(year, month - 1, day);
+        const weekday = date.getDay(); // Sunday = 0
+
+        if (weekday === 0) {
+            dateInput.value = '';
+            timeSelect.disabled = true;
+            message.textContent =
+                'Live Cafe is closed on Sundays. Please choose another date.';
+            return;
+        }
+
+        const saturday = weekday === 6;
+        const latestMinutes = saturday ? 14 * 60 + 50 : 17 * 60 + 50;
+
+        const now = new Date();
+        const isToday =
+            now.getFullYear() === year &&
+            now.getMonth() === month - 1 &&
+            now.getDate() === day;
+
+        for (let minutes = 6 * 60 + 10; minutes <= latestMinutes; minutes += 10) {
+            const hour = Math.floor(minutes / 60);
+            const minute = minutes % 60;
+
+            if (isToday && minutes <= now.getHours() * 60 + now.getMinutes()) {
+                continue;
+            }
+
+            const time = String(hour).padStart(2, '0') + ':' +
+                String(minute).padStart(2, '0');
+
+            const option = document.createElement('option');
+            option.value = time;
+            option.textContent = time;
+            timeSelect.appendChild(option);
+        }
+
+        timeSelect.disabled = timeSelect.options.length <= 1;
+
+        if (timeSelect.disabled) {
+            message.textContent =
+                'No collection slots remain for this date. Please choose another day.';
+            return;
+        }
+
+        message.textContent = saturday
+            ? 'Saturday collection: 06:10–14:50.'
+            : 'Weekday collection: 06:10–17:50.';
+
+        if (selectedDate === previousDate &&
+            [...timeSelect.options].some(option => option.value === previousTime)) {
+            timeSelect.value = previousTime;
+        }
+
+        updateHiddenValue();
+    }
+
+    function updateHiddenValue() {
+        hiddenInput.value = dateInput.value && timeSelect.value
+            ? dateInput.value + 'T' + timeSelect.value
+            : '';
+    }
+
+    dateInput.addEventListener('change', refreshSlots);
+    timeSelect.addEventListener('change', updateHiddenValue);
+
+    document.getElementById('checkout-form').addEventListener('submit', event => {
+        updateHiddenValue();
+
+        if (!hiddenInput.value || timeSelect.disabled) {
+            event.preventDefault();
+            message.textContent = 'Please select a valid collection date and time.';
+        }
+    });
+
+    refreshSlots();
+});
+</script>
+
                 </form>
             </section>
 
@@ -48,15 +181,39 @@
                 <h2>Order summary</h2>
 
                 <ul class="summary-items">
-                    @foreach($products as $item)
-                        <li class="summary-item">
-                            <div class="summary-item-info">
-                                <span class="summary-item-name">{{ $item['product']->name }}</span>
-                                <span class="summary-item-qty">× {{ $item['quantity'] }}</span>
-                            </div>
-                            <span class="summary-item-price">R{{ number_format((float) $item['lineTotal'], 2) }}</span>
-                        </li>
-                    @endforeach
+                    
+@foreach($products as $item)
+    <li class="summary-item">
+        @php
+            $product = $item['product'];
+            $image = $product->images->first();
+        @endphp
+
+        <div class="summary-item-image">
+            @if($image)
+                <img
+                    src="{{ asset($image->path) }}"
+                    alt="{{ $product->name }}"
+                    loading="lazy"
+                >
+            @else
+                <div class="summary-item-image-placeholder">
+                    {{ $product->name }}
+                </div>
+            @endif
+        </div>
+
+        <div class="summary-item-info">
+            <span class="summary-item-name">{{ $product->name }}</span>
+            <span class="summary-item-qty">× {{ $item['quantity'] }}</span>
+        </div>
+
+        <span class="summary-item-price">
+            R{{ number_format((float) $item['lineTotal'], 2) }}
+        </span>
+    </li>
+@endforeach
+
                 </ul>
 
                 <div class="summary-divider"></div>
@@ -194,6 +351,45 @@
     }
     .summary-total { color: var(--ink); font-size: 1.05rem; margin-bottom: 1.5rem; }
     .summary-total strong { color: var(--green); font-size: 1.35rem; }
+
+    
+.summary-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.summary-item-image {
+    width: 64px;
+    height: 64px;
+    flex-shrink: 0;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #F0EEE9;
+}
+
+.summary-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.summary-item-image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px;
+    font-size: 10px;
+    text-align: center;
+}
+
+.summary-item-info {
+    flex: 1;
+    min-width: 0;
+}
 
     .place-order-btn {
         display: block;

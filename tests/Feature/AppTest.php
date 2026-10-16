@@ -21,7 +21,10 @@ test('running club page loads', function () {
 });
 
 test('about us page loads', function () {
-    $this->get('/about')->assertOk()->assertSee('images/about/cafe-counter.jpg');
+    $this->get('/about')
+        ->assertOk()
+        ->assertSee('More than a café.')
+        ->assertSee('Our community.');
 });
 
 test('contact us page loads', function () {
