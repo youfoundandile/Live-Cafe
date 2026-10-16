@@ -1,44 +1,46 @@
+{{-- resources/views/admin/partials/sidebar.blade.php --}}
+@php($openConflicts = \App\Models\SyncConflict::open()->count())
 
- <aside class="admin-sidebar">
-        <div class="admin-sidebar-section">
-            <p class="admin-sidebar-label">Overview</p>
-            <ul>
-                <li><a href="{{ route('admin.dashboard') }}" class="active">Dashboard</a></li>
-            </ul>
-        </div>
+<aside class="admin-sidebar" aria-label="Admin menu">
+    <div class="admin-sidebar-section">
+        <p class="admin-sidebar-label">Overview</p>
+        <ul>
+            <li><a href="{{ route('admin.dashboard') }}" @class(['active' => request()->routeIs('admin.dashboard')])>Dashboard</a></li>
+        </ul>
+    </div>
 
-        <div class="admin-sidebar-section">
-            <p class="admin-sidebar-label">Cafe</p>
-            <ul>
-                <li><a href="{{ route('admin.products.index') }}">Products</a></li>
-                li><a href="{{ route('admin.categories.index') }}">Categories</a></li>
-                <li><a href="{{ route('admin.inventory.index') }}">Inventory</a></li>
-                <li><a href="{{ route('admin.orders.index') }}">Orders</a></li>
-                <li><a href="{{ route('admin.sales.index') }}">POS Sales</a></li>
-                <li>
-                    <a href="{{ route('admin.sync.index') }}">
-                        Sync conflicts
-                        @php($openConflicts = \App\Models\SyncConflict::open()->count())
-                        @if ($openConflicts) <span class="status-badge status-cancelled">{{ $openConflicts }}</span> @endif
-                    </a>
-                </li>
+    <div class="admin-sidebar-section">
+        <p class="admin-sidebar-label">Cafe</p>
+        <ul>
+            <li><a href="{{ route('admin.products.index') }}" @class(['active' => request()->routeIs('admin.products.*')])>Products</a></li>
+            <li><a href="{{ route('admin.categories.index') }}" @class(['active' => request()->routeIs('admin.categories.*')])>Categories</a></li>
+            <li><a href="{{ route('admin.inventory.index') }}" @class(['active' => request()->routeIs('admin.inventory.*')])>Inventory</a></li>
+            <li><a href="{{ route('admin.orders.index') }}" @class(['active' => request()->routeIs('admin.orders.*')])>Orders</a></li>
+            <li><a href="{{ route('admin.sales.index') }}" @class(['active' => request()->routeIs('admin.sales.*')])>POS Sales</a></li>
+            <li>
+                <a href="{{ route('admin.sync.index') }}" @class(['active' => request()->routeIs('admin.sync.*')])>
+                    Sync conflicts
+                    @if ($openConflicts)
+                        <span class="status-badge status-cancelled">{{ $openConflicts }}</span>
+                    @endif
+                </a>
+            </li>
+        </ul>
+    </div>
 
-            </ul>
-        </div>
+    <div class="admin-sidebar-section">
+        <p class="admin-sidebar-label">Running Club</p>
+        <ul>
+            <li><a href="{{ route('admin.events.index') }}" @class(['active' => request()->routeIs('admin.events.*')])>Events</a></li>
+            <li><a href="{{ route('admin.announcements.index') }}" @class(['active' => request()->routeIs('admin.announcements.*')])>Announcements</a></li>
+        </ul>
+    </div>
 
-        <div class="admin-sidebar-section">
-            <p class="admin-sidebar-label">Running Club</p>
-            <ul>
-                <li><a href="{{ route('admin.events.index') }}">Events</a></li>
-                <li><a href="{{ route('admin.announcements.index') }}">Announcements</a></li>
-            </ul>
-        </div>
-
-        <div class="admin-sidebar-section">
-            <p class="admin-sidebar-label">System</p>
-            <ul>
-                <li><a href="{{ route('admin.users.index') }}">Users</a></li>
-                <li><a href="{{ route('admin.partnerships.index') }}">Partnerships</a></li>
-            </ul>
-        </div>
+    <div class="admin-sidebar-section">
+        <p class="admin-sidebar-label">System</p>
+        <ul>
+            <li><a href="{{ route('admin.users.index') }}" @class(['active' => request()->routeIs('admin.users.*')])>Users</a></li>
+            <li><a href="{{ route('admin.partnerships.index') }}" @class(['active' => request()->routeIs('admin.partnerships.*')])>Partnerships</a></li>
+        </ul>
+    </div>
 </aside>

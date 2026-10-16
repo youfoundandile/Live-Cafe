@@ -4,16 +4,20 @@
 
 @section('admin-content')
 <h1>Users</h1>
-<a href="{{ route('admin.users.create') }}">Add staff member</a>
+<a href="{{ route('admin.users.create') }}" class="btn">Add staff member</a>
 
-<form method="GET" action="{{ route('admin.users.index') }}">
-    <input type="search" name="search" value="{{ request('search') }}" placeholder="Name, surname or email">
-    <select name="role">
-        <option value="">All roles</option>
-        @foreach (['customer', 'staff', 'admin'] as $role)
-            <option value="{{ $role }}" @selected(request('role') === $role)>{{ ucfirst($role) }}</option>
-        @endforeach
-    </select>
+<form method="GET" action="{{ route('admin.users.index') }}" class="filter-bar">
+    <label>Search
+        <input type="search" name="search" value="{{ request('search') }}" placeholder="Name, surname or email">
+    </label>
+    <label>Role
+        <select name="role">
+            <option value="">All roles</option>
+            @foreach (['customer', 'staff', 'admin'] as $role)
+                <option value="{{ $role }}" @selected(request('role') === $role)>{{ ucfirst($role) }}</option>
+            @endforeach
+        </select>
+    </label>
     <button type="submit">Filter</button>
 </form>
 
@@ -31,7 +35,7 @@
                     <form method="POST" action="{{ route('admin.users.destroy', $user) }}" style="display:inline"
                           onsubmit="return confirm('Delete this user?')">
                         @csrf @method('DELETE')
-                        <button type="submit">Delete</button>
+                        <button type="submit" class="btn-danger">Delete</button>
                     </form>
                 @endunless
             </td>

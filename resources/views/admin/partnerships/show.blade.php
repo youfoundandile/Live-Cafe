@@ -48,9 +48,10 @@
                 </td>
                 <td>
                     @if ($member->status)
-                        <form method="POST" action="{{ route('admin.partnerships.members.destroy', [$partnership, $member]) }}" style="display:inline">
+                        <form method="POST" action="{{ route('admin.partnerships.members.destroy', [$partnership, $member]) }}" style="display:inline"
+                            onsubmit="return confirm('Deactivate this member? They lose the partnership benefit.')">
                             @csrf @method('DELETE')
-                            <button type="submit">Deactivate</button>
+                            <button type="submit" class="btn-danger">Deactivate</button>
                         </form>
                     @endif
                 </td>

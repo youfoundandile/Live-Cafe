@@ -5,26 +5,37 @@
 @section('admin-content')
 <h1>POS Sales</h1>
 
-<form method="GET" action="{{ route('admin.sales.index') }}">
-    <input type="date" name="from" value="{{ $from->toDateString() }}">
-    <input type="date" name="to" value="{{ $to->toDateString() }}">
-    <select name="payment_method">
-        <option value="">Cash and card</option>
-        <option value="cash" @selected(request('payment_method') === 'cash')>Cash</option>
-        <option value="card" @selected(request('payment_method') === 'card')>Card</option>
-    </select>
-    <select name="offline">
-        <option value="">Online and offline</option>
-        <option value="1" @selected(request('offline') === '1')>Offline only</option>
-        <option value="0" @selected(request('offline') === '0')>Online only</option>
-    </select>
-    <select name="status">
-        <option value="">All statuses</option>
-        <option value="confirmed" @selected(request('status') === 'confirmed')>Confirmed</option>
-        <option value="cancelled" @selected(request('status') === 'cancelled')>Voided</option>
-    </select>
-    <button type="submit">Filter</button>
+<form method="GET" action="{{ route('admin.sales.index') }}" class="filter-bar">
+    <label>From
+        <input type="date" name="from" value="{{ $from->toDateString() }}">
+    </label>
+    <label>To
+        <input type="date" name="to" value="{{ $to->toDateString() }}">
+    </label>
+    <label>Payment
+        <select name="payment_method">
+            <option value="">Cash and card</option>
+            <option value="cash" @selected(request('payment_method') === 'cash')>Cash</option>
+            <option value="card" @selected(request('payment_method') === 'card')>Card</option>
+        </select>
+    </label>
+    <label>Till mode
+        <select name="offline">
+            <option value="">Online and offline</option>
+            <option value="1" @selected(request('offline') === '1')>Offline only</option>
+            <option value="0" @selected(request('offline') === '0')>Online only</option>
+        </select>
+    </label>
+    <label>Status
+        <select name="status">
+            <option value="">All statuses</option>
+            <option value="confirmed" @selected(request('status') === 'confirmed')>Confirmed</option>
+            <option value="cancelled" @selected(request('status') === 'cancelled')>Voided</option>
+        </select>
+    </label>
+    <button type="submit" class="btn-danger">Filter</button>
 </form>
+
 
 <div class="stat-grid">
     @foreach ($totals as $total)

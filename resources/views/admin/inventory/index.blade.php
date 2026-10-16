@@ -24,12 +24,12 @@
             <tr>
                 <td>{{ $ingredient->name }}</td>
                 <td>
-                    {{ $ingredient->quantity }} {{ $ingredient->unit }}
+                    {{ (float) $ingredient->quantity }} {{ $ingredient->unit }}
                     @if ($ingredient->quantity <= $ingredient->reorder_level)
                         <span class="status-badge status-cancelled">Low</span>
                     @endif
                 </td>
-                <td>{{ $ingredient->reorder_level }} {{ $ingredient->unit }}</td>
+                <td>{{ (float)$ingredient->reorder_level }} {{ $ingredient->unit }}</td>
                 <td>
                     @include('admin.inventory.partials.adjust-form', [
                         'action' => route('admin.inventory.ingredients.adjust', $ingredient),

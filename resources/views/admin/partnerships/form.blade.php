@@ -36,7 +36,7 @@
         Active
     </label>
 
-    <button type="submit">{{ $partnership->exists ? 'Save changes' : 'Create partnership' }}</button>
-    <a href="{{ route('admin.partnerships.index') }}">Cancel</a>
+    <button type="submit" class="btn">{{ $partnership->exists ? 'Save changes' : 'Create partnership' }}</button>
+    <a href="{{ route('admin.partnerships.index') }}" class="btn btn-quiet">Cancel</a>
 </form>
 @endsection

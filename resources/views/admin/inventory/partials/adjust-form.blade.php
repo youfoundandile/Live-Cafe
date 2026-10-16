@@ -2,8 +2,8 @@
 <form method="POST" action="{{ $action }}" class="adjust-form">
     @csrf
     @method('PATCH')
-    <input type="number" name="change" step="{{ $step }}" placeholder="+5 or -2" required>
-    <select name="reason" required>
+    <input type="number" name="change" step="{{ $step }}" placeholder="+5 or -2" aria-label="Change in stock" required>
+    <select name="reason" aria-label="Reason" required>
         <option value="delivery">Delivery</option>
         <option value="wastage">Wastage</option>
         <option value="count_correction">Count correction</option>

@@ -59,6 +59,7 @@ Route::prefix('admin')
 
         // Events
         Route::resource('events', EventManagementController::class);
+        Route::patch('/events/{event}/cancel', [EventManagementController::class, 'cancel'])->name('events.cancel');
         Route::get('/events/{event}/rsvps', [EventManagementController::class, 'rsvps'])->name('events.rsvps');
         Route::get('/events/{event}/rsvps.csv', [EventManagementController::class, 'exportRsvps'])->name('events.rsvps.export');
 

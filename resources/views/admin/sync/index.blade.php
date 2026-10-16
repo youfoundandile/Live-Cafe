@@ -22,21 +22,27 @@
         <tr><th>Sale</th><th>Till staff</th><th>Rung up</th><th>Item</th><th>Short by</th><th>Resolve</th></tr>
         @forelse ($open as $conflict)
             <tr>
-                    <form method="POST" action="{{ route('admin.sync.resolve', $conflict) }}">
+                <td><a href="{{ route('admin.sales.show', $conflict->sales_id) }}">#{{ $conflict->sales_id }}</a></td>
+                <td>{{ $conflict->sale->user->name }}</td>
+                <td>{{ $conflict->sale->occurred_at->format('d M Y H:i') }}</td>
+                <td>{{ $conflict->stockable->name }}</td>
+                <td>{{ (float) $conflict->shortfall }}</td>
+                <td>
+                    <form method="POST" action="{{ route('admin.sync.resolve', $conflict) }}" class="adjust-form">
                         @csrf @method('PATCH')
-                        <select name="resolution">
+                        <select name="resolution" aria-label="Resolution">
                             <option value="recount">Recount</option>
                             <option value="voided">Sale voided</option>
                             <option value="accepted_loss">Accept loss</option>
                         </select>
-                        <input type="number" name="actual_count" step="0.001" min="0" placeholder="Real count (recount only)">
-                        <input type="text" name="note" required maxlength="255" placeholder="What happened?">
+                        <input type="number" name="actual_count" step="0.001" min="0" placeholder="Real count (recount only)" aria-label="Real count">
+                        <input type="text" name="note" required maxlength="255" placeholder="What happened?" aria-label="What happened">
                         <button type="submit">Resolve</button>
                     </form>
                 </td>
             </tr>
         @empty
-            <tr><td colspan="6">No open conflicts.</td></tr>
+            <tr><td colspan="6" class="empty">No open conflicts.</td></tr>
         @endforelse
     </table>
 </section>
@@ -56,7 +62,7 @@
                 <td>{{ $conflict->resolved_at->format('d M Y H:i') }}</td>
             </tr>
         @empty
-            <tr><td colspan="7">Nothing resolved yet.</td></tr>
+            <tr><td colspan="7" class="empty">Nothing resolved yet.</td></tr>
         @endforelse
     </table>
 </section>
