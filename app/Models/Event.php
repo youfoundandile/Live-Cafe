@@ -59,7 +59,11 @@ class Event extends Model
      * Events don't get one, because a running photo would be wrong for, say,
      * a coffee tasting.
      */
-    private const PLACEHOLDER_PHOTO = 'images/running/run-Holder.png';
+    private const FALLBACK_PHOTOS = [
+        'images/running/run-pink.jpg',
+        'images/running/run-road.jpg',
+        'images/running/crew.jpg',
+    ];
 
     protected $fillable = [
         'title',
@@ -310,7 +314,7 @@ class Event extends Model
             return null;
         }
 
-        return asset(self::PLACEHOLDER_PHOTO);
+        return asset(self::FALLBACK_PHOTOS[$this->id % count(self::FALLBACK_PHOTOS)]);
     }
 
     public function mapUrl(): string
