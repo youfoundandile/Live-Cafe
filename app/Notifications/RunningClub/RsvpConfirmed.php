@@ -4,22 +4,16 @@ namespace App\Notifications\RunningClub;
 
 use App\Models\Event;
 use App\Models\User;
-use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 /**
- * Sent when a member RSVPs (or re-joins after cancelling).
- *
- * ShouldQueue puts the email on the queue instead of sending it during the
- * request, so the RSVP page answers straight away and a slow or failing mail
- * server is retried by the queue worker instead of breaking the RSVP.
+ * Sent immediately when a member RSVPs (or re-joins after cancelling) on the
+ * Run Club portal, matching Fortify's synchronous auth mail delivery so
+ * confirmation emails arrive without requiring a background queue worker.
  */
-class RsvpConfirmed extends Notification implements ShouldQueue
+class RsvpConfirmed extends Notification
 {
-    use Queueable;
-
     public function __construct(
         public Event $event,
         public int $extras,
