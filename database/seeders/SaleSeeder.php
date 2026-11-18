@@ -22,7 +22,7 @@ class SaleSeeder extends Seeder
             false,
             null,
             [
-                'Latte' => 1,
+                'Latte (350ml)' => 1,
                 'Butter Croissant' => 1,
             ]
         );
@@ -36,7 +36,7 @@ class SaleSeeder extends Seeder
             null,
             [
                 'Chicken Wrap' => 2,
-                'Bottled Water' => 1,
+                'Still Water' => 1,
             ]
         );
 
@@ -48,8 +48,8 @@ class SaleSeeder extends Seeder
             false,
             null,
             [
-                'Americano' => 2,
-                'Blueberry Muffin' => 1,
+                'Americano (250ml)' => 2,
+                'Banana Loaf' => 1,
             ]
         );
 
@@ -61,7 +61,8 @@ class SaleSeeder extends Seeder
             false,
             null,
             [
-                'Live Cafe Running Club T Shirt' => 1,
+                'Club Anthem' => 1,
+                'Iced Matcha' => 1,
             ]
         );
 
@@ -73,7 +74,7 @@ class SaleSeeder extends Seeder
             true,
             now(),
             [
-                'Iced Coffee' => 2,
+                'Iced Latte' => 2,
                 'Extra Espresso Shot' => 1,
             ]
         );

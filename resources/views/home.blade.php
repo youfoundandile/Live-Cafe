@@ -863,7 +863,7 @@
         <div class="shop-strip-header">
             <div>
                 <p class="section-label">The menu</p>
-                <h2>Fresh food and great coffee.</h2>
+                <h2>Thirst???</h2>
             </div>
             <a href="{{ route('shop.index') }}" class="see-all">View full menu</a>
         </div>

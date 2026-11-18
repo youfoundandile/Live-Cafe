@@ -171,43 +171,100 @@
 
         /* ── Footer ── */
         .footer {
-            background: var(--green);
-            color: rgba(255,255,255,0.75);
-            padding: 2.5rem 2rem;
-            font-size: 0.85rem;
-            margin-top: auto;
-            border-top: 2px solid var(--accent);
+            background:#111;
+            color: var(--white);
+            padding: 4rem 0 0;
         }
 
         .footer-inner {
             max-width: 1200px;
             margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            padding: 0 2rem 3rem;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1.2fr 1.2fr;
+            gap: 2.5rem;
         }
 
-        .footer-logo img {
-            height: 36px;
+        .footer-logo-img {
+            height: 64px;
             width: auto;
-            object-fit: contain;
+            border-radius: 4px;
+            margin-bottom: 1rem;
+        }
+
+        .footer-col h3 {
+            margin: 0 0 1rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: var(--accent);
+        }
+
+        .footer-about {
+            margin: 0 0 1rem;
+            max-width: 36ch;
+            font-size: 0.92rem;
+            line-height: 1.7;
+            color: rgba(255, 255, 255, 0.78);
+        }
+
+        .footer-tagline {
+            margin: 0;
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+        }
+
+        .footer-note {
+            margin: 0;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.6);
         }
 
         .footer-links {
-            display: flex;
-            gap: 1.5rem;
             list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
         }
 
         .footer-links a {
-            color: rgba(255,255,255,0.75);
+            color: rgba(255, 255, 255, 0.78);
             text-decoration: none;
-            transition: color 0.15s;
+            font-size: 0.92rem;
+            transition: color 0.2s;
         }
-        .footer-links a:hover { color: var(--white); }
 
+        .footer-links a:hover,
+        .footer-links a:focus-visible {
+            color: var(--white);
+            text-decoration: underline;
+            text-underline-offset: 4px;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+            padding: 1.25rem 2rem;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            margin: 0;
+            font-size: 0.82rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        @media (max-width: 900px) {
+            .footer-inner { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 560px) {
+            .footer { padding-top: 3rem; }
+            .footer-inner { grid-template-columns: 1fr; padding: 0 1.25rem 2rem; }
+        }
         /* ── Utility ── */
         .container {
             max-width: 1200px;
@@ -236,7 +293,7 @@
                 @auth
                     {{-- ── Logged In Session Nav ── --}}
                     <li>
-                        <a href="{{ route('shop.index') }}" class="{{ request()->is('shop*') ? 'active' : '' }}">Shop</a>
+                        <a href="{{ route('shop.index') }}" class="{{ request()->is('shop*') ? 'active' : '' }}">Menu</a>
                     </li>
                     <li>
                         <a href="{{ route('running.index') }}" class="{{ request()->is('running*') ? 'active' : '' }}">Running Club</a>
@@ -276,7 +333,7 @@
                 @else
                     {{-- ── Guest Session Nav (Visible in new browsers) ── --}}
                     <li>
-                        <a href="{{ route('shop.index') }}" class="{{ request()->is('shop*') ? 'active' : '' }}">Shop</a>
+                        <a href="{{ route('shop.index') }}" class="{{ request()->is('shop*') ? 'active' : '' }}">Menu</a>
                     </li>
                     <li>
                         <a href="{{ route('running.index') }}" class="{{ request()->is('running*') ? 'active' : '' }}">Running Club</a>
@@ -312,21 +369,59 @@
         @yield('content')
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-inner">
-            <div class="footer-logo">
-                <img src="{{ asset('images/livecafelogo.jpeg') }}" alt="Live Cafe Logo">
-            </div>
+<!-- Footer -->
+<footer class="footer">
+    <div class="footer-inner">
 
+        <div class="footer-col footer-brand">
+            <img src="{{ asset('images/livecafelogo.jpeg') }}" alt="Live Cafe Logo" class="footer-logo-img">
+            <p class="footer-about">
+                Your healthy breakfast and lunch destination. Fresh sandwiches, pressed juices,
+                smoothies and specialty coffee.
+            </p>
+            <p class="footer-tagline">EAT. DRINK. LIVE.</p>
+        </div>
+
+        <div class="footer-col">
+            <h3>Explore</h3>
             <ul class="footer-links">
-                <li><a href="{{ route('shop.index') }}">Shop</a></li>
+                <li><a href="{{ route('shop.index') }}">Menu</a></li>
                 <li><a href="{{ route('running.index') }}">Running Club</a></li>
                 <li><a href="{{ route('about') }}">About us</a></li>
                 <li><a href="{{ route('contact') }}">Contact us</a></li>
             </ul>
         </div>
-    </footer>
+
+        <div class="footer-col">
+            <h3>Get in touch</h3>
+            <ul class="footer-links">
+                <li>
+                    <a href="https://wa.me/27706729906?text={{ urlencode('Hi Live Cafe, I have a question.') }}"
+                       target="_blank" rel="noopener">WhatsApp: 070 672 9906</a>
+                </li>
+                <li><a href="mailto:info@livecafe.co.za">info@livecafe.co.za</a></li>
+                <li>
+                    <a href="https://whatsapp.com/channel/0029Vb7QAlz47Xe88U53K11L"
+                       target="_blank" rel="noopener">Run club WhatsApp channel</a>
+                </li>
+            </ul>
+        </div>
+
+        <div class="footer-col">
+            <h3>Saturday runs</h3>
+            <p class="footer-about">
+                Our community run club meets every Saturday at the cafe, at any fitness level.
+                Enjoy discounted drinks right after.
+            </p>
+            <p class="footer-note">Orders are collection only.</p>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; {{ date('Y') }} Live Cafe. All rights reserved.</p>
+    </div>
+</footer>
 
    
 @stack('scripts')

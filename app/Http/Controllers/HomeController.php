@@ -14,9 +14,12 @@ class HomeController extends Controller
         // Grab a handful of available products for the home page strip
         $featuredProducts = Product::where('prod_availability', true)
             ->where('quantity', '>', 0)
+            ->whereHas('category', function ($query) {
+                $query->whereIn('name', ['Food', 'Drink']);
+            })
             ->with('category')
             ->latest()
-            ->take(6)
+            ->take(10)
             ->get();
 
         // Upcoming events only — ordered by soonest first (cancelled runs are left out)

@@ -19,7 +19,7 @@ class OrderSeeder extends Seeder
             'collected',
             now()->subDays(2)->setTime(8, 15),
             [
-                'Latte' => 2,
+                'Latte (350ml)' => 2,
                 'Butter Croissant' => 1,
             ]
         );
@@ -30,7 +30,7 @@ class OrderSeeder extends Seeder
             now()->subDay()->setTime(9, 20),
             [
                 'Chicken Wrap' => 1,
-                'Iced Coffee' => 1,
+                'Iced Latte' => 1,
             ]
         );
 
@@ -39,8 +39,8 @@ class OrderSeeder extends Seeder
             'confirmed',
             now()->addDay()->setTime(11, 30),
             [
-                'Cappuccino' => 1,
-                'Blueberry Muffin' => 2,
+                'Cappuccino (250ml)' => 1,
+                'Banana Loaf' => 2,
             ]
         );
 
@@ -49,8 +49,8 @@ class OrderSeeder extends Seeder
             'pending',
             now()->addHours(4),
             [
-                'Americano' => 1,
-                'Granola Yoghurt Bowl' => 1,
+                'Americano (350ml)' => 1,
+                'Green Salad' => 1,
             ]
         );
 
@@ -59,8 +59,8 @@ class OrderSeeder extends Seeder
             'cancelled',
             now()->addDay()->setTime(13, 0),
             [
-                'Avocado Toast' => 1,
-                'Fresh Orange Juice' => 1,
+                'Pescado' => 1,
+                'Homemade Lemonade' => 1,
             ]
         );
 
@@ -69,8 +69,8 @@ class OrderSeeder extends Seeder
             'confirmed',
             now()->addHours(6),
             [
-                'Live Cafe Running Club T Shirt' => 1,
-                'Bottled Water' => 2,
+                'Club Anthem' => 1,
+                'Still Water' => 2,
             ]
         );
     }
