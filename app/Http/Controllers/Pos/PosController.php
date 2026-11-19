@@ -24,7 +24,13 @@ class PosController extends Controller
             ->orderBy('name')
             ->get();
 
-        return view('pos.index', compact('products'));
+        $categories = $products->pluck('category')
+            ->filter()
+            ->unique('id')
+            ->sortBy('name')
+            ->values();
+
+        return view('pos.index', compact('products', 'categories'));
     }
 
     public function store(Request $request): RedirectResponse
