@@ -43,26 +43,6 @@
                     @foreach($products as $item)
                         <article class="cart-item">
 
-                            {{-- Product image --}}
-                            <div class="cart-item-image">
-                                @php
-                                    $image = $item['product']->images
-                                        ->sortBy('sort_order')
-                                        ->first();
-                                @endphp
-
-                                @if($image)
-                                    <img
-                                        src="{{ asset($image->path) }}"
-                                        alt="{{ $image->alt_text ?? $item['product']->name }}"
-                                    >
-                                @else
-                                    <div class="cart-item-placeholder">
-                                       LIVE café
-                                    </div>
-                                @endif
-                            </div>
-
                             {{-- Product information --}}
                             <div class="cart-item-info">
                                 <div>
@@ -304,41 +284,15 @@
     }
 
     /* Individual item */
-    .cart-item {
-        display: grid;
-        grid-template-columns: 120px minmax(0, 1fr) auto;
-        gap: 1.25rem;
-        align-items: center;
-        background: var(--white);
-        border: 1px solid var(--sage);
-        padding: 1rem;
-    }
-
-    .cart-item-image {
-        width: 120px;
-        height: 120px;
-        overflow: hidden;
-        background: var(--sage);
-    }
-
-    .cart-item-image img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    .cart-item-placeholder {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: var(--green);
-        font-family: var(--font-display);
-        font-size: 0.85rem;
-        text-align: center;
-        padding: 1rem;
-    }
+   .cart-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 1.25rem;
+    align-items: center;
+    background: var(--white);
+    border: 1px solid var(--sage);
+    padding: 1.5rem;
+   }
 
     .cart-item-info {
         align-self: stretch;
@@ -425,7 +379,7 @@
 
     /* Item total */
     .cart-item-total {
-        grid-column: 2 / -1;
+        grid-column: 1 / -1;
         display: flex;
         justify-content: flex-end;
         align-items: center;
@@ -568,13 +522,8 @@
         }
 
         .cart-item {
-            grid-template-columns: 90px minmax(0, 1fr);
-        }
-
-        .cart-item-image {
-            width: 90px;
-            height: 90px;
-        }
+    grid-template-columns: 1fr;
+}
 
         .cart-item-actions {
             grid-column: 1 / -1;

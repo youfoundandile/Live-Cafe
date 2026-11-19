@@ -171,100 +171,43 @@
 
         /* ── Footer ── */
         .footer {
-            background:#111;
-            color: var(--white);
-            padding: 4rem 0 0;
+            background: var(--green);
+            color: rgba(255,255,255,0.75);
+            padding: 2.5rem 2rem;
+            font-size: 0.85rem;
+            margin-top: auto;
+            border-top: 2px solid var(--accent);
         }
 
         .footer-inner {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0 2rem 3rem;
-            display: grid;
-            grid-template-columns: 1.4fr 1fr 1.2fr 1.2fr;
-            gap: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .footer-logo-img {
-            height: 64px;
+        .footer-logo img {
+            height: 36px;
             width: auto;
-            border-radius: 4px;
-            margin-bottom: 1rem;
-        }
-
-        .footer-col h3 {
-            margin: 0 0 1rem;
-            font-size: 0.8rem;
-            font-weight: 600;
-            letter-spacing: 0.14em;
-            text-transform: uppercase;
-            color: var(--accent);
-        }
-
-        .footer-about {
-            margin: 0 0 1rem;
-            max-width: 36ch;
-            font-size: 0.92rem;
-            line-height: 1.7;
-            color: rgba(255, 255, 255, 0.78);
-        }
-
-        .footer-tagline {
-            margin: 0;
-            font-family: var(--font-display);
-            font-size: 1.1rem;
-            letter-spacing: 0.08em;
-        }
-
-        .footer-note {
-            margin: 0;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.6);
+            object-fit: contain;
         }
 
         .footer-links {
-            list-style: none;
-            margin: 0;
-            padding: 0;
             display: flex;
-            flex-direction: column;
-            gap: 0.6rem;
+            gap: 1.5rem;
+            list-style: none;
         }
 
         .footer-links a {
-            color: rgba(255, 255, 255, 0.78);
+            color: rgba(255,255,255,0.75);
             text-decoration: none;
-            font-size: 0.92rem;
-            transition: color 0.2s;
+            transition: color 0.15s;
         }
+        .footer-links a:hover { color: var(--white); }
 
-        .footer-links a:hover,
-        .footer-links a:focus-visible {
-            color: var(--white);
-            text-decoration: underline;
-            text-underline-offset: 4px;
-        }
-
-        .footer-bottom {
-            border-top: 1px solid rgba(255, 255, 255, 0.15);
-            padding: 1.25rem 2rem;
-            text-align: center;
-        }
-
-        .footer-bottom p {
-            margin: 0;
-            font-size: 0.82rem;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        @media (max-width: 900px) {
-            .footer-inner { grid-template-columns: 1fr 1fr; }
-        }
-
-        @media (max-width: 560px) {
-            .footer { padding-top: 3rem; }
-            .footer-inner { grid-template-columns: 1fr; padding: 0 1.25rem 2rem; }
-        }
         /* ── Utility ── */
         .container {
             max-width: 1200px;
@@ -277,6 +220,174 @@
             .footer-inner { flex-direction: column; text-align: center; }
             .footer-links { justify-content: center; }
         }
+
+        /* Navigation rolling text animation */
+.nav-roll {
+    display: inline-flex;
+    flex-direction: column;
+    height: 1.2em;
+    overflow: hidden;
+    vertical-align: middle;
+}
+
+.nav-roll span {
+    display: block;
+    height: 1.2em;
+    line-height: 1.2em;
+    flex-shrink: 0;
+    transition: transform 0.4s cubic-bezier(0.76, 0, 0.24, 1);
+}
+
+.nav-roll span:nth-child(2) {
+    transform: translateY(0);
+}
+
+@media (hover: hover) {
+    a:hover .nav-roll span,
+    a:focus-visible .nav-roll span,
+    .nav-signout:hover .nav-roll span,
+    .nav-signout:focus-visible .nav-roll span {
+        transform: translateY(-100%);
+    }
+}
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+    .nav-roll span {
+        transition: none;
+    }
+}
+
+
+/* Guest authentication popup */
+.guest-auth-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+}
+
+.guest-auth-modal.is-open {
+    display: flex;
+}
+
+.guest-auth-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(35, 24, 32, 0.65);
+    backdrop-filter: blur(4px);
+}
+
+.guest-auth-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 420px;
+    padding: 2.5rem 2rem;
+    background: #F8E8F0;
+    border: 1px solid rgba(91, 58, 78, 0.2);
+    border-radius: 8px;
+    box-shadow: 0 20px 60px rgba(35, 24, 32, 0.25);
+    text-align: center;
+    animation: guestAuthReveal 0.25s ease;
+}
+
+.guest-auth-close {
+    position: absolute;
+    top: 0.7rem;
+    right: 1rem;
+    border: none;
+    background: transparent;
+    color: #5B3A4E;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+.guest-auth-eyebrow {
+    margin-bottom: 0.6rem;
+    color: #9D5875;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+}
+
+.guest-auth-content h2 {
+    margin-bottom: 0.8rem;
+    color: #5B3A4E;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+}
+
+.guest-auth-message {
+    margin-bottom: 1.8rem;
+    color: #716773;
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.guest-auth-actions {
+    display: flex;
+    justify-content: center;
+    gap: 0.75rem;
+}
+
+.guest-auth-actions a {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    border: 1px solid #5B3A4E;
+    border-radius: 30px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.2s ease, color 0.2s ease;
+}
+
+.guest-auth-login {
+    background: #5B3A4E;
+    color: #FFFFFF;
+}
+
+.guest-auth-register {
+    background: transparent;
+    color: #5B3A4E;
+}
+
+.guest-auth-login:hover {
+    background: #79536A;
+}
+
+.guest-auth-register:hover {
+    background: #5B3A4E;
+    color: #FFFFFF;
+}
+
+@keyframes guestAuthReveal {
+    from {
+        opacity: 0;
+        transform: translateY(12px) scale(0.98);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@media (max-width: 480px) {
+    .guest-auth-content {
+        padding: 2.2rem 1.3rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .guest-auth-content {
+        animation: none;
+    }
+}
+
     </style>
     @stack('styles')
 </head>
@@ -291,59 +402,113 @@
 
             <ul class="nav-links">
                 @auth
-                    {{-- ── Logged In Session Nav ── --}}
-                    <li>
-                        <a href="{{ route('shop.index') }}" class="{{ request()->is('shop*') ? 'active' : '' }}">Menu</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('running.index') }}" class="{{ request()->is('running*') ? 'active' : '' }}">Running Club</a>
-                    </li>
-                    
-                    @if(auth()->user()->isCustomer())
-                        <li>
-                            <a href="{{ route('shop.orders.index') }}" class="{{ request()->is('shop/orders*') ? 'active' : '' }}">My Orders</a>
-                        </li>
+    {{-- ── Logged In Session Nav ── --}}
+    <li>
+        <a href="{{ route('shop.index') }}" class="{{ request()->is('shop*') ? 'active' : '' }}">
+            <span class="nav-roll">
+                <span>Shop</span>
+                <span>Shop</span>
+            </span>
+        </a>
+    </li>
 
-                        <li>
-                            <a href="{{ route('shop.cart.index') }}" class="{{ request()->is('shop/cart*') ? 'active' : '' }}">
-                                Cart
-                                 @php
-                                 $cartCount = array_sum(session('cart', []));
-                                 @endphp
-                                @if($cartCount > 0)
-                                   ({{ $cartCount }})
-                                @endif
-                            </a>
-                        </li>
-                    @endif
+    <li>
+        <a href="{{ route('running.index') }}" class="{{ request()->is('running*') ? 'active' : '' }}">
+            <span class="nav-roll">
+                <span>Running Club</span>
+                <span>Running Club</span>
+            </span>
+        </a>
+    </li>
 
-                    @if(auth()->user()->isStaff())
-                        <li>
-                            <a href="{{ route('pos.index') }}" class="{{ request()->is('pos*') ? 'active' : '' }}">POS</a>
-                        </li>
-                    @endif
+    @if(auth()->user()->isCustomer())
+        <li>
+            <a href="{{ route('shop.orders.index') }}" class="{{ request()->is('shop/orders*') ? 'active' : '' }}">
+                <span class="nav-roll">
+                    <span>My Orders</span>
+                    <span>My Orders</span>
+                </span>
+            </a>
+        </li>
 
-                    {{-- Formatted Sign Out Engine --}}
-                    <li>
-                        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
-                            @csrf
-                            <button type="submit" class="nav-signout">Sign Out</button>
-                        </form>
-                    </li>
+        <li>
+            <a href="{{ route('shop.cart.index') }}" class="{{ request()->is('shop/cart*') ? 'active' : '' }}">
+                <span class="nav-roll">
+                    <span>Cart</span>
+                    <span>Cart</span>
+                </span>
+
+                @php
+                    $cartCount = array_sum(session('cart', []));
+                @endphp
+
+                <span data-cart-count {{ $cartCount < 1 ? 'hidden' : '' }}>
+                    {{ $cartCount }}
+                </span>
+            </a>
+        </li>
+    @endif
+
+    @if(auth()->user()->isStaff())
+        <li>
+            <a href="{{ route('pos.index') }}" class="{{ request()->is('pos*') ? 'active' : '' }}">
+                <span class="nav-roll">
+                    <span>POS</span>
+                    <span>POS</span>
+                </span>
+            </a>
+        </li>
+    @endif
+
+    {{-- Sign Out --}}
+    <li>
+        <form action="{{ route('logout') }}" method="POST" style="display: inline;">
+            @csrf
+            <button type="submit" class="nav-signout">
+                <span class="nav-roll">
+                    <span>Sign Out</span>
+                    <span>Sign Out</span>
+                </span>
+            </button>
+        </form>
+    </li>
                 @else
                     {{-- ── Guest Session Nav (Visible in new browsers) ── --}}
                     <li>
-                        <a href="{{ route('shop.index') }}" class="{{ request()->is('shop*') ? 'active' : '' }}">Menu</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('running.index') }}" class="{{ request()->is('running*') ? 'active' : '' }}">Running Club</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('login') }}" class="{{ request()->is('login') ? 'active' : '' }}">Sign in</a>
-                    </li>
-                    <li>
-                        <a href="{{ route('register') }}" class="nav-btn">Join</a>
-                    </li>
+    <a href="{{ route('shop.index') }}" class="{{ request()->is('shop*') ? 'active' : '' }}">
+        <span class="nav-roll">
+            <span>Shop</span>
+            <span>Shop</span>
+        </span>
+    </a>
+</li>
+
+<li>
+    <a href="{{ route('running.index') }}" class="{{ request()->is('running*') ? 'active' : '' }}">
+        <span class="nav-roll">
+            <span>Running Club</span>
+            <span>Running Club</span>
+        </span>
+    </a>
+</li>
+
+<li>
+    <a href="{{ route('login') }}" class="{{ request()->is('login') ? 'active' : '' }}">
+        <span class="nav-roll">
+            <span>Sign in</span>
+            <span>Sign in</span>
+        </span>
+    </a>
+</li>
+
+<li>
+    <a href="{{ route('register') }}" class="nav-btn">
+        <span class="nav-roll">
+            <span>Join</span>
+            <span>Join</span>
+        </span>
+    </a>
+</li>
                 @endauth
             </ul>
         </div>
@@ -369,62 +534,143 @@
         @yield('content')
     </main>
 
-<!-- Footer -->
-<footer class="footer">
-    <div class="footer-inner">
+    <!-- Footer -->
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-logo">
+                <img src="{{ asset('images/livecafelogo.jpeg') }}" alt="Live Cafe Logo">
+            </div>
 
-        <div class="footer-col footer-brand">
-            <img src="{{ asset('images/livecafelogo.jpeg') }}" alt="Live Cafe Logo" class="footer-logo-img">
-            <p class="footer-about">
-                Your healthy breakfast and lunch destination. Fresh sandwiches, pressed juices,
-                smoothies and specialty coffee.
-            </p>
-            <p class="footer-tagline">EAT. DRINK. LIVE.</p>
-        </div>
-
-        <div class="footer-col">
-            <h3>Explore</h3>
             <ul class="footer-links">
-                <li><a href="{{ route('shop.index') }}">Menu</a></li>
-                <li><a href="{{ route('running.index') }}">Running Club</a></li>
-                <li><a href="{{ route('about') }}">About us</a></li>
-                <li><a href="{{ route('contact') }}">Contact us</a></li>
-            </ul>
+    <li>
+        <a href="{{ route('shop.index') }}">
+            <span class="nav-roll">
+                <span>Shop</span>
+                <span>Shop</span>
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('running.index') }}">
+            <span class="nav-roll">
+                <span>Running Club</span>
+                <span>Running Club</span>
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('about') }}">
+            <span class="nav-roll">
+                <span>About us</span>
+                <span>About us</span>
+            </span>
+        </a>
+    </li>
+    <li>
+        <a href="{{ route('contact') }}">
+            <span class="nav-roll">
+                <span>Contact us</span>
+                <span>Contact us</span>
+            </span>
+        </a>
+    </li>
+</ul>
         </div>
+    </footer>
 
-        <div class="footer-col">
-            <h3>Get in touch</h3>
-            <ul class="footer-links">
-                <li>
-                    <a href="https://wa.me/27706729906?text={{ urlencode('Hi Live Cafe, I have a question.') }}"
-                       target="_blank" rel="noopener">WhatsApp: 070 672 9906</a>
-                </li>
-                <li><a href="mailto:info@livecafe.co.za">info@livecafe.co.za</a></li>
-                <li>
-                    <a href="https://whatsapp.com/channel/0029Vb7QAlz47Xe88U53K11L"
-                       target="_blank" rel="noopener">Run club WhatsApp channel</a>
-                </li>
-            </ul>
+
+<!-- Guest sign-in prompt -->
+<div class="guest-auth-modal" id="guestAuthModal" aria-hidden="true">
+    <div class="guest-auth-backdrop"></div>
+
+    <div
+        class="guest-auth-content"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="guestAuthTitle"
+    >
+        <button
+            type="button"
+            class="guest-auth-close"
+            aria-label="Close"
+        >&times;</button>
+
+        <p class="guest-auth-eyebrow">LIVE CAFÉ</p>
+
+        <h2 id="guestAuthTitle">Join our community</h2>
+
+        <p class="guest-auth-message">
+            Sign in or create an account to order from our menu.
+        </p>
+
+        <div class="guest-auth-actions">
+            <a href="{{ route('login') }}" class="guest-auth-login">
+                Sign In
+            </a>
+
+            <a href="{{ route('register') }}" class="guest-auth-register">
+                Sign Up
+            </a>
         </div>
-
-        <div class="footer-col">
-            <h3>Saturday runs</h3>
-            <p class="footer-about">
-                Our community run club meets every Saturday at the cafe, at any fitness level.
-                Enjoy discounted drinks right after.
-            </p>
-            <p class="footer-note">Orders are collection only.</p>
-        </div>
-
     </div>
-
-    <div class="footer-bottom">
-        <p>&copy; {{ date('Y') }} Live Cafe. All rights reserved.</p>
-    </div>
-</footer>
-
+</div>
    
 @stack('scripts')
+
+<script>
+    (() => {
+        const modal = document.getElementById('guestAuthModal');
+
+        if (!modal) return;
+
+        const closeButton = modal.querySelector('.guest-auth-close');
+        const backdrop = modal.querySelector('.guest-auth-backdrop');
+        let previousFocus = null;
+
+        // Open the popup
+        window.openGuestAuthModal = function () {
+            previousFocus = document.activeElement;
+
+            modal.classList.add('is-open');
+            modal.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+
+            closeButton.focus();
+        };
+
+        // Close the popup
+        function closeGuestAuthModal() {
+            modal.classList.remove('is-open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+
+            if (previousFocus) {
+                previousFocus.focus();
+            }
+        }
+
+        closeButton.addEventListener('click', closeGuestAuthModal);
+        backdrop.addEventListener('click', closeGuestAuthModal);
+
+        // Close when Escape is pressed
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && modal.classList.contains('is-open')) {
+                closeGuestAuthModal();
+            }
+        });
+
+        // Support any button or link marked as a guest-auth trigger
+        document.addEventListener('click', function (event) {
+            const trigger = event.target.closest('[data-open-guest-auth]');
+
+            if (trigger) {
+                event.preventDefault();
+                window.openGuestAuthModal();
+            }
+        });
+    })();
+</script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {

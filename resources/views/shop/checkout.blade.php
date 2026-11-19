@@ -185,23 +185,8 @@ document.addEventListener('DOMContentLoaded', () => {
 @foreach($products as $item)
     <li class="summary-item">
         @php
-            $product = $item['product'];
-            $image = $product->images->first();
-        @endphp
-
-        <div class="summary-item-image">
-            @if($image)
-                <img
-                    src="{{ asset($image->path) }}"
-                    alt="{{ $product->name }}"
-                    loading="lazy"
-                >
-            @else
-                <div class="summary-item-image-placeholder">
-                    {{ $product->name }}
-                </div>
-            @endif
-        </div>
+    $product = $item['product'];
+@endphp
 
         <div class="summary-item-info">
             <span class="summary-item-name">{{ $product->name }}</span>
@@ -357,33 +342,6 @@ document.addEventListener('DOMContentLoaded', () => {
     display: flex;
     align-items: center;
     gap: 12px;
-}
-
-.summary-item-image {
-    width: 64px;
-    height: 64px;
-    flex-shrink: 0;
-    overflow: hidden;
-    border-radius: 8px;
-    background: #F0EEE9;
-}
-
-.summary-item-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-}
-
-.summary-item-image-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 4px;
-    font-size: 10px;
-    text-align: center;
 }
 
 .summary-item-info {

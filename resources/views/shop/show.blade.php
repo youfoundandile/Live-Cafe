@@ -8,24 +8,7 @@
 
         <a href="{{ route('shop.index') }}" class="back-link">← Back to menu</a>
 
-        <div class="product-layout">
-
-            {{-- Image --}}
-            <div class="product-image">
-                @php
-                    $image = $product->images->sortBy('sort_order')->first();
-                @endphp
-
-                @if($image)
-                   <img src="{{ asset($image->path) }}" alt="{{ $image->alt_text ?? $product->name }}">
-                @else
-                    <div class="product-image-placeholder">Live Cafe</div>
-                @endif
-
-                @if(! $product->prod_availability || $product->quantity < 1)
-                    <span class="sold-out-badge">Sold out</span>
-                @endif
-            </div>
+        <div class="product-layout"
 
             {{-- Details --}}
             <div class="product-details">
@@ -53,8 +36,14 @@
                 @elseif(auth()->check())
                     <p class="stock-note">Only customer accounts can order from the shop.</p>
                 @else
-                    <a href="{{ route('login') }}" class="add-to-cart-btn">Sign in to order</a>
-                @endif
+                    <button
+        type="button"
+        class="add-to-cart-btn"
+        data-open-guest-auth
+    >
+        Sign in to order
+    </button>               
+     @endif
             </div>
 
         </div>
@@ -90,35 +79,13 @@
     .product-flash-error { background: #fdecea; color: var(--danger); border: 1px solid var(--danger); }
 
     .product-layout {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-        gap: 3rem;
-        align-items: start;
-    }
-
-    .product-image {
-        position: relative;
-        aspect-ratio: 1 / 1;
-        background: var(--sage);
-        overflow: hidden;
-    }
-    .product-image img { width: 100%; height: 100%; object-fit: cover; }
-    .product-image-placeholder {
-        width: 100%; height: 100%;
-        display: flex; align-items: center; justify-content: center;
-        color: var(--green);
-        font-family: var(--font-display);
-    }
-    .sold-out-badge {
-        position: absolute;
-        top: 1rem; left: 1rem;
-        background: var(--danger);
-        color: var(--white);
-        font-size: 0.75rem;
-        font-weight: 600;
-        padding: 0.35rem 0.75rem;
-        border-radius: 3px;
-    }
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: start;
+    max-width: 650px;
+    margin: 0 auto;
+}
 
     .product-category {
         color: var(--slate);

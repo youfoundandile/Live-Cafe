@@ -70,19 +70,57 @@ class ProductManagementController extends Controller
         return back()->with('success', 'Product hidden from sale.');
     }
 
-    private function formData(Product $product): array
-    {
-        return [
-            'product' => $product,
-            'categories' => Category::where('is_active', true)
-                ->orWhere('id', $product->category_id)   // keep the current one, even if it was deactivated
-                ->orderBy('sort_order')
-                ->get(),
+    
+private function formData(Product $product): array
+{
+    $categoryGroups = Category::with([
+        'children' => fn ($query) => $query
+            ->where('is_active', true)
+            ->orderBy('sort_order'),
+    ])
+        ->whereNull('parent_id')
+        ->whereIn('name', ['Food', 'Drinks'])
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->get();
 
-            'ingredients' => Ingredient::orderBy('name')->get(),
+    $standaloneCategories = Category::whereNull('parent_id')
+        ->whereNotIn('name', ['Food', 'Drinks'])
+        ->where('is_active', true)
+        ->orderBy('sort_order')
+        ->get();
 
-        ];
+    // Preserve the current parent category when editing an older product.
+    $legacyCategory = null;
+
+    if ($product->exists && $product->category_id) {
+        $currentCategory = Category::find($product->category_id);
+
+        if (
+            $currentCategory &&
+            $currentCategory->parent_id === null &&
+            in_array($currentCategory->name, ['Food', 'Drinks'], true)
+        ) {
+            $legacyCategory = $currentCategory;
+        }
     }
+
+    return [
+        'product' => $product,
+
+        // Retained temporarily while we update the Blade dropdown.
+        'categories' => Category::where('is_active', true)
+            ->orWhere('id', $product->category_id)
+            ->orderBy('sort_order')
+            ->get(),
+
+        'categoryGroups' => $categoryGroups,
+        'standaloneCategories' => $standaloneCategories,
+        'legacyCategory' => $legacyCategory,
+
+        'ingredients' => Ingredient::orderBy('name')->get(),
+    ];
+}
 
     private function syncRecipe(Product $product, ProductRequest $request): void
     {

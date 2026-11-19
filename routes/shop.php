@@ -20,6 +20,8 @@ Route::prefix('shop')->name('shop.')->group(function () {
 
     // 1. Public Routes — Product browsing (no login required)
     Route::get('/', [ProductController::class, 'index'])->name('index');
+    Route::get('/category/{category}', [ProductController::class, 'category'])
+    ->name('category');
     Route::get('/product/{product}', [ProductController::class, 'show'])->name('product.show');
 
     // 2. Authenticated & Verified Customers Only

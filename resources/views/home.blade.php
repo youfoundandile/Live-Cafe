@@ -784,6 +784,348 @@
         .route-pulse { display: none; }
         .feature-card, .product-tile, .feature-card-icon { transition: none; }
     }
+
+        /* ═════════════ The cafe: moving menu cards ═════════════ */
+    .mn-section { padding: 5rem 0; overflow: hidden; }
+
+    .mn-head {
+        max-width: 1200px;
+        margin: 0 auto 2.5rem;
+        padding: 0 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+    }
+
+    .mn-head h2 { margin-bottom: 0.75rem; }
+    .mn-head .section-lead { margin-bottom: 0; }
+
+    .mn-head-actions { display: flex; align-items: center; gap: 1.25rem; }
+
+    .mn-head .see-all {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--green);
+        text-decoration: none;
+        border-bottom: 1.5px solid var(--accent);
+        padding-bottom: 2px;
+    }
+
+    .mn-pause {
+        padding: 0.4rem 0.95rem;
+        border: 1.5px solid var(--green);
+        border-radius: 999px;
+        background: transparent;
+        color: var(--green);
+        font: inherit;
+        font-size: 0.8rem;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* The window the cards move through. The mask fades both ends away. */
+    .mn-viewport {
+        --card-w: clamp(210px, 22vw, 270px);
+        --gap: 1.5rem;
+        overflow: hidden;
+        padding: 1.5rem 0;
+        -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+        mask-image: linear-gradient(90deg, transparent 0, #000 7%, #000 93%, transparent 100%);
+    }
+
+    /* The track holds two identical rows. Sliding it left by exactly half
+       lands the copy where the original started, so the loop never jumps. */
+    .mn-track {
+        display: flex;
+        width: max-content;
+        animation: mn-scroll 60s linear infinite;
+    }
+
+    .mn-group {
+        display: flex;
+        flex-shrink: 0;
+        gap: var(--gap);
+        padding-right: var(--gap);   /* so both rows are exactly the same width */
+    }
+
+    @keyframes mn-scroll { to { transform: translateX(-50%); } }
+
+    .mn-viewport.is-paused .mn-track,
+    .mn-viewport:has(.mn-card:focus-visible) .mn-track { animation-play-state: paused; }
+
+    /* ---- One card ---- */
+    .mn-card {
+        position: relative;
+        flex: 0 0 var(--card-w);
+        height: calc(var(--card-w) * 1.5);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 1.4rem;
+        border: 0;
+        border-radius: 18px;
+        overflow: hidden;
+        text-align: left;
+        cursor: pointer;
+        font-family: var(--font-body);
+        color: var(--t);
+        background: linear-gradient(160deg, var(--c1), var(--c2));
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.12);
+        transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.35s ease;
+    }
+
+    /* A soft white glow rising from the bottom edge */
+    .mn-card::after {
+        content: '';
+        position: absolute;
+        left: -20%;
+        right: -20%;
+        bottom: -30%;
+        height: 60%;
+        background: radial-gradient(closest-side, rgba(255, 255, 255, 0.55), transparent);
+        pointer-events: none;
+    }
+
+    .mn-card:focus-visible { outline: 3px solid var(--ink); outline-offset: 3px; }
+
+    .mn-card-group {
+        font-size: 0.7rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        opacity: 0.8;
+    }
+
+    .mn-card-title {
+        margin-top: 0.35rem;
+        font-family: var(--font-display);
+        font-size: clamp(1.5rem, 2.2vw, 1.9rem);
+        line-height: 1.1;
+    }
+
+    .mn-card-media {
+        position: relative;
+        z-index: 1;
+        margin-top: auto;
+        width: 100%;
+        aspect-ratio: 4 / 3;
+        border-radius: 12px;
+        overflow: hidden;
+        background: rgba(255, 255, 255, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .mn-card-media img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* Fix image framing on the 3D Salad and Wraps cards */
+.mn-card[data-template="mn-tpl-2"] .mn-card-media img,
+.mn-card[data-template="mn-tpl-3"] .mn-card-media img {
+    transform: scale(1.08) translateX(-1.5%);
+    transform-origin: center center;
+}
+
+    .mn-initial {
+        font-family: var(--font-display);
+        font-size: 4.5rem;
+        line-height: 1;
+        opacity: 0.85;
+    }
+
+    .mn-card-more {
+        position: relative;
+        z-index: 1;
+        margin-top: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+
+    .mn-card-more i {
+        width: 1.5rem;
+        height: 1.5rem;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border: 1.5px solid currentColor;
+        border-radius: 50%;
+        font-style: normal;
+        line-height: 1;
+    }
+
+    /* Hover effects only on devices that can really hover */
+    @media (hover: hover) {
+
+        .mn-card:hover {
+    box-shadow: 0 18px 34px rgba(0, 0, 0, 0.18);
+}
+    }
+
+    /* ---- The pop-up ---- */
+    .mn-dialog {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    width: min(780px, calc(100% - 2rem));
+    padding: 0;
+    border: 0;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--white);
+    color: var(--ink);
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+}
+
+    .mn-dialog::backdrop {
+        background: rgba(25, 12, 20, 0.6);
+        backdrop-filter: blur(3px);
+    }
+
+    .mn-dialog[open] { animation: mn-pop 0.35s cubic-bezier(0.22, 1, 0.36, 1); }
+
+    @keyframes mn-pop {
+        from { opacity: 0; transform: translateY(16px) scale(0.97); }
+        to   { opacity: 1; transform: none; }
+    }
+
+    .mn-dialog-close {
+        position: absolute;
+        top: 0.75rem;
+        right: 0.75rem;
+        z-index: 2;
+        width: 2.25rem;
+        height: 2.25rem;
+        border: 0;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.9);
+        color: var(--ink);
+        font-size: 1.4rem;
+        line-height: 1;
+        cursor: pointer;
+            display: flex;
+        align-items: center;
+    justify-content: center;
+    padding: 0;
+    appearance: none;
+    box-shadow: none;
+    text-decoration: none;
+    }
+
+    .mn-dialog-close::before,
+.mn-dialog-close::after {
+    content: none !important;
+    display: none !important;
+}
+
+    .mn-sheet { display: grid; grid-template-columns: 1fr 1.1fr; min-height: 380px; }
+
+    .mn-sheet-media {
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(160deg, var(--c1), var(--c2));
+        color: var(--t);
+    }
+
+    .mn-sheet-media img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .mn-sheet-media {
+    overflow: hidden;
+}
+
+.mn-sheet-media img {
+    transform: scale(1.05) translateX(-0.5%);
+}
+.mn-sheet--wraps .mn-sheet-media img {
+    transform: scale(1.12) translateX(-1.5%);
+}
+
+    .mn-initial--big { font-size: 9rem; }
+
+    .mn-sheet-body {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        padding: 2.5rem 2rem 2rem;
+    }
+
+    .mn-sheet-group {
+        margin: 0;
+        font-size: 0.75rem;
+        font-weight: 700;
+        letter-spacing: 0.16em;
+        text-transform: uppercase;
+        color: var(--slate);
+    }
+
+    .mn-sheet-body h3 {
+        margin: 0;
+        font-family: var(--font-display);
+        font-size: 2rem;
+        line-height: 1.1;
+        color: var(--green);
+    }
+
+    .mn-sheet-text { margin: 0; line-height: 1.6; color: var(--slate); }
+
+    .mn-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.4rem;
+        margin: 0.25rem 0 0.5rem;
+        padding: 0;
+        list-style: none;
+    }
+
+    .mn-items li {
+        padding: 0.25rem 0.75rem;
+        border: 1px solid var(--sage);
+        border-radius: 999px;
+        font-size: 0.8rem;
+    }
+
+    .mn-cta { align-self: flex-start; margin-top: auto; }
+
+    @media (max-width: 700px) {
+        .mn-section { padding: 3.5rem 0; }
+        .mn-head { padding: 0 1.25rem; }
+        .mn-sheet { grid-template-columns: 1fr; }
+        .mn-sheet-media { min-height: 200px; }
+    }
+
+    /* Animations switched off: the cards stop moving and can be swiped or scrolled instead */
+    @media (prefers-reduced-motion: reduce) {
+        .mn-track { animation: none; }
+        .mn-viewport { overflow-x: auto; -webkit-mask-image: none; mask-image: none; }
+        .mn-group[inert] { display: none; }
+        .mn-pause { display: none; }
+        .mn-card, .mn-card-media img { transition: none; }
+        .mn-dialog[open] { animation: none; }
+    }
+
+    .mn-dialog {
+    caret-color: transparent;
+}
+
+.mn-dialog * {
+    caret-color: transparent;
+}
 </style>
 @endpush
 
@@ -819,68 +1161,150 @@
     </div>
 </section>
 
-{{-- What we offer --}}
-<section class="section" id="offer">
-    <div class="container">
-        <p class="section-label">What we offer</p>
-        <h2>One place for everything LIVE café.</h2>
+{{-- The cafe: one section with a slowly moving row of menu cards --}}
+@php
+    // One entry per card. Subcategories are not in the database yet, so they live here for now.
+    $menuCards = [
+        [
+            'group' => 'Food', 'title' => 'Sandwiches', 'slug' => 'sandwiches', 'category_id' => 5,
+            'c1' => '#F4C26B', 'c2' => '#E8872F', 'text' => '#2A1608',
+            'blurb' => 'On panini bread, with the fillings you love.',
+            'items' => ['Club Anthem', 'Pescado', 'Special T', 'Grilled Chicken'],
+        ],
+        [
+            'group' => 'Food', 'title' => 'Pastries', 'slug' => 'pastries', 'category_id' => 6,
+            'c1' => '#F0CADB', 'c2' => '#CF8FB0', 'text' => '#3A1A2C',
+            'blurb' => 'Croissants, loaves and sweet bakes to go with your coffee.',
+            'items' => ['Almond Croissant', 'Butter Croissant', 'Butter Scone', 'Banana Loaf', 'Carrot Cake', 'Pecan Nut Squares'],
+        ],
+        [
+            'group' => 'Food', 'title' => 'Salad', 'slug' => 'salad', 'category_id' => 7,
+            'c1' => '#DDE6BF', 'c2' => '#86A56E', 'text' => '#1F2E17',
+            'blurb' => 'Fresh and light, plain or with chicken or tuna.',
+            'items' => ['Green Salad', 'Chicken Salad', 'Tuna Salad'],
+        ],
+        [
+            'group' => 'Food', 'title' => 'Wraps', 'slug' => 'wraps', 'category_id' => 8,
+            'c1' => '#F2B28C', 'c2' => '#E07A4F', 'text' => '#2A1008',
+            'blurb' => 'Filling and easy to take with you.',
+            'items' => ['Chicken Wrap'],
+        ],
+        // TODO: replace the drinks wording and items with Lloyd's drinks menu
+        [
+            'group' => 'Drinks', 'title' => 'Hot drinks', 'slug' => 'hot-drinks', 'category_id' => 9,
+            'c1' => '#8A5A74', 'c2' => '#4B2A40', 'text' => '#FFFFFF',
+            'blurb' => 'Coffee and more, made to order and served hot.',
+            'items' => ['Americano', 'Cappuccino', 'Latte'],
+        ],
+        [
+            'group' => 'Drinks', 'title' => 'Ice ice baby', 'slug' => 'ice-ice-baby', 'category_id' => 10,
+            'c1' => '#A9C6EA', 'c2' => '#5D86C4', 'text' => '#0F2140',
+            'blurb' => 'Cold and refreshing, for warm Sandton days.',
+            'items' => ['Iced Coffee'],
+        ],
+        [
+            'group' => 'Drinks', 'title' => 'Signature', 'slug' => 'signature', 'category_id' => 11,
+            'c1' => '#E7A3C4', 'c2' => '#C86C97', 'text' => '#2B0D1C',
+            'blurb' => 'Our own creations. Ask about the latest.',
+            'items' => [],
+        ],
+    ];
+    // Use the photo if the file exists. Otherwise the card shows a big letter.
+    $menuCards = array_map(function ($card) {
+        $extensions = ['jpg', 'jpeg', 'png'];
+        $card['img'] = null;
 
-        <div class="feature-grid">
-            <div class="feature-card">
-                <div class="feature-card-icon">☕</div>
-                <h3>Order for collection</h3>
-                <p>Browse our food, drinks, and merchandise. Place your order online and collect when it's ready — no queue, no wait.</p>
-                <a href="{{ route('shop.index') }}">Browse the menu</a>
-            </div>
+        foreach ($extensions as $extension) {
+            $file = 'images/menu/'.$card['slug'].'.'.$extension;
 
-            <div class="feature-card">
-                <div class="feature-card-icon">🏃</div>
-                <h3>Saturday running club</h3>
-                <p>Weekly runs from the cafe every Saturday. RSVP so the organisers know you're coming, and bring friends along.</p>
-                <a href="{{ route('running.index') }}">See upcoming runs</a>
-            </div>
-      <div class="feature-card">
-    <div class="feature-card-icon">📣</div>
-    @if ($latestAnnouncement)
-        <h3>Announcements</h3>
-        <p>{{ \Illuminate\Support\Str::limit($latestAnnouncement->description, 140) }}</p>
-        <a href="{{ route('running.announcements.show', $latestAnnouncement) }}">Read more</a>
-        <a href="{{ route('running.announcements.index') }}">View all</a>
-    @else
-        <h3>Announcements</h3>
-        <p>Stay up to date with what's happening at LIVE café — new products, special events, and club news.</p>
-        <a href="{{ route('running.announcements.index') }}">Read announcements</a>
-    @endif
+            if (file_exists(public_path($file))) {
+                $card['img'] = asset($file);
+                break;
+            }
+        }
+
+        return $card;
+    }, $menuCards);
+@endphp
+
+<section class="section mn-section" id="menu">
+
+    <div class="mn-head">
+        <div>
+            <p class="section-label">The cafe</p>
+            <h2>Fresh food and great coffee.</h2>
+            <p class="section-lead">Order ahead, pay online and collect in store. Pick a favourite to see what is on the menu.</p>
+        </div>
+        <div class="mn-head-actions">
+    <a href="{{ route('shop.index') }}" class="see-all">View full menu</a>
 </div>
+    </div>
 
+    <div class="mn-viewport" id="mnViewport">
+        <div class="mn-track">
+            {{-- The same row twice. The copy is hidden from keyboards and screen readers. --}}
+            @for ($g = 0; $g < 2; $g++)
+                <div class="mn-group" @if($g === 1) inert aria-hidden="true" @endif>
+                    @foreach($menuCards as $i => $card)
+                        <button type="button" class="mn-card"
+                                style="--c1: {{ $card['c1'] }}; --c2: {{ $card['c2'] }}; --t: {{ $card['text'] }};"
+                                data-template="mn-tpl-{{ $i }}"
+                                data-href="{{ route('shop.category', ['category' => $card['category_id']]) }}">
+                            <span class="mn-card-group">{{ $card['group'] }}</span>
+                            <span class="mn-card-title">{{ $card['title'] }}</span>
+                            <span class="mn-card-media">
+                                @if($card['img'])
+                                    <img src="{{ $card['img'] }}" alt="" loading="lazy">
+                                @else
+                                    <span class="mn-initial">{{ mb_substr($card['title'], 0, 1) }}</span>
+                                @endif
+                            </span>
+                            <span class="mn-card-more">Explore <i aria-hidden="true">+</i></span>
+                        </button>
+                    @endforeach
+                </div>
+            @endfor
         </div>
     </div>
+
 </section>
 
-{{-- Shop strip --}}
-<section class="section section-alt">
-    <div class="shop-strip">
-        <div class="shop-strip-header">
-            <div>
-                <p class="section-label">The menu</p>
-                <h2>Thirst???</h2>
+{{-- What opens when a card is clicked: one template per card, one shared pop-up --}}
+@foreach($menuCards as $i => $card)
+    <template id="mn-tpl-{{ $i }}">
+        <div class="mn-sheet {{ $card['slug'] === 'wraps' ? 'mn-sheet--wraps' : '' }}" style="--c1: ...">
+            <div class="mn-sheet-media">
+                @if($card['img'])
+                    <img src="{{ $card['img'] }}" alt="{{ $card['title'] }} at Live Cafe">
+                @else
+                    <span class="mn-initial mn-initial--big">{{ mb_substr($card['title'], 0, 1) }}</span>
+                @endif
             </div>
-            <a href="{{ route('shop.index') }}" class="see-all">View full menu</a>
-        </div>
+            <div class="mn-sheet-body">
+                <p class="mn-sheet-group">{{ $card['group'] }}</p>
+                <h3 id="mnTitle">{{ $card['title'] }}</h3>
+                <p class="mn-sheet-text">{{ $card['blurb'] }}</p>
 
-        <div class="product-row">
-            @forelse($featuredProducts as $product)
-                <a href="{{ route('shop.product.show', $product) }}" class="product-tile">
-                    <p class="product-tile-cat">{{ $product->category->name }}</p>
-                    <h4>{{ $product->name }}</h4>
-                    <span class="product-tile-price">R{{ number_format($product->price, 2) }}</span>
-                </a>
-            @empty
-                <p style="color:var(--slate);font-size:0.9rem;">No products available right now.</p>
-            @endforelse
+                @if(count($card['items']))
+                    <ul class="mn-items">
+                        @foreach($card['items'] as $item)
+                            <li>{{ $item }}</li>
+                        @endforeach
+                    </ul>
+                @endif
+
+                <a class="btn-dark mn-cta" href="{{ route('shop.category', ['category' => $card['category_id']]) }}">See it in the shop →</a>
+            </div>
         </div>
-    </div>
-</section>
+    </template>
+@endforeach
+
+<dialog class="mn-dialog" id="mnDialog" aria-labelledby="mnTitle">
+    <button type="button" class="mn-dialog-close" aria-label="Close"
+            onclick="this.closest('dialog').close()">×</button>
+
+    <div class="mn-dialog-content"></div>
+</dialog>
 
 {{-- Running strip --}}
 <section class="section">
@@ -984,6 +1408,42 @@
 
     // And if the video is very slow to load, don't leave the page wordless.
     setTimeout(show, 4000);
+})();
+</script>
+
+<script>
+(function () {
+    var viewport = document.getElementById('mnViewport');
+    var dialog   = document.getElementById('mnDialog');
+    if (!viewport || !dialog) { return; }
+
+    var holder = dialog.querySelector('.mn-dialog-content');
+
+    // Clicking a card: copy its template into the pop-up and open it
+    viewport.addEventListener('click', function (e) {
+        var card = e.target.closest('.mn-card');
+        if (!card) { return; }
+
+        // Very old browsers without <dialog> just go to the shop
+        if (typeof dialog.showModal !== 'function') {
+            window.location.href = card.dataset.href;
+            return;
+        }
+
+        var template = document.getElementById(card.dataset.template);
+        holder.replaceChildren(template.content.cloneNode(true));
+        viewport.classList.add('is-paused');
+        dialog.showModal();
+    });
+
+    // Clicking the dark area outside the box closes it (Esc and the × close it already)
+    dialog.addEventListener('click', function (e) {
+        if (e.target === dialog) { dialog.close(); }
+    });
+
+    // When it closes, the cards carry on moving unless the visitor pressed Pause
+    dialog.addEventListener('close', function () {
+    viewport.classList.remove('is-paused');});
 })();
 </script>
 @endsection

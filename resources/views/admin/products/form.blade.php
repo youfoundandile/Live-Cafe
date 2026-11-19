@@ -38,16 +38,38 @@
         <textarea name="description" rows="3">{{ old('description', $product->description) }}</textarea>
     </label>
 
-    <label>Category
-        <select name="category_id" required>
-            <option value="">Choose a category</option>
-            @foreach ($categories as $category)
-                <option value="{{ $category->id }}" @selected(old('category_id', $product->category_id) == $category->id)>
-                    {{ $category->name }}
-                </option>
-            @endforeach
-        </select>
-    </label>
+    
+<label>Category
+    <select name="category_id" required>
+        <option value="">Choose a category</option>
+
+        @foreach ($categoryGroups as $group)
+            <optgroup label="{{ strtoupper($group->name) }}">
+                @foreach ($group->children as $category)
+                    <option value="{{ $category->id }}"
+                        @selected(old('category_id', $product->category_id) == $category->id)>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </optgroup>
+        @endforeach
+
+        @foreach ($standaloneCategories as $category)
+            <option value="{{ $category->id }}"
+                @selected(old('category_id', $product->category_id) == $category->id)>
+                {{ $category->name }}
+            </option>
+        @endforeach
+
+        @if ($legacyCategory)
+            <option value="{{ $legacyCategory->id }}"
+                @selected(old('category_id', $product->category_id) == $legacyCategory->id)>
+                {{ $legacyCategory->name }} (Legacy category)
+            </option>
+        @endif
+    </select>
+</label>
+
 
     <label>Price (R)
         <input type="number" name="price" value="{{ old('price', $product->price) }}" step="0.01" min="0" required>
