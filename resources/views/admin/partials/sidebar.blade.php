@@ -20,6 +20,7 @@
             <li><a href="{{ route('admin.sales.index') }}" @class(['active' => request()->routeIs('admin.sales.*')])>POS Sales</a></li>
             <li><a href="{{ route('pos.index') }}" target="_blank" rel="noopener">Open POS till ↗</a></li>
 
+            <!-- Sync conflicts -->
             <li>
                 <a href="{{ route('admin.sync.index') }}" @class(['active' => request()->routeIs('admin.sync.*')])>
                     Sync conflicts
