@@ -21,7 +21,7 @@ class CategorySeeder extends Seeder
 
         // Reuse the existing Drink record instead of creating a duplicate.
         $drinks = Category::whereIn('name', ['Drink', 'Drinks'])->first()
-            ?? new Category();
+            ?? new Category;
 
         $drinks->fill([
             'name' => 'Drinks',
@@ -61,7 +61,7 @@ class CategorySeeder extends Seeder
 
         // Reuse the existing Add On record and make it a Food subcategory.
         $addOns = Category::whereIn('name', ['Add On', 'Add Ons'])->first()
-            ?? new Category();
+            ?? new Category;
 
         $addOns->fill([
             'name' => 'Add Ons',
